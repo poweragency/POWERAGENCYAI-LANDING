@@ -1,0 +1,3027 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Power Agency</title>
+  <meta name="description" content="Power Agency — E-Commerce, Prop Firm, AI. Software. Formazione. Collaborazione." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  :root {
+    --black: #000000;
+    --white: #ffffff;
+    --orange: #C85A14;
+    --cyan: #00d4ff;
+    --green: #10b981;
+    --indigo: #6366f1;
+    --purple: #a855f7;
+    --gray-900: #0a0a0a;
+    --gray-800: #111111;
+    --gray-700: #1a1a1a;
+    --gray-600: #222222;
+    --gray-400: #555555;
+    --gray-300: #888888;
+    --gray-200: #aaaaaa;
+    --gray-100: #dddddd;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Noise grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+
+  /* Selection */
+  ::selection { background: var(--orange); color: #fff; }
+
+  /* ---- CANVAS ---- */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ---- LAYOUT ---- */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  section { position: relative; z-index: 1; }
+
+  /* ---- NAVBAR ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    transform: translateY(-10px);
+    overflow: visible;
+  }
+  /* Navbar glow — fades on scroll via --nav-glow CSS var */
+  nav::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 70%;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(200,90,20,0.45) 25%,
+      rgba(220,110,30,0.65) 50%,
+      rgba(200,90,20,0.45) 75%,
+      transparent 100%
+    );
+    opacity: var(--nav-glow, 1);
+    transition: opacity 0.15s linear;
+    pointer-events: none;
+  }
+  nav::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 55%;
+    height: 120px;
+    background: radial-gradient(ellipse at 50% 100%,
+      rgba(200,90,20,0.16) 0%,
+      rgba(200,90,20,0.06) 45%,
+      transparent 75%
+    );
+    opacity: var(--nav-glow, 1);
+    transition: opacity 0.15s linear;
+    pointer-events: none;
+    z-index: -1;
+  }
+  nav .container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--white);
+  }
+  .nav-logo-mark {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-img { height: 40px; width: auto; display: block; }
+  .nav-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    gap: 1px;
+  }
+  .nav-wordmark-power {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: var(--white);
+  }
+  .nav-wordmark-agency {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--orange);
+  }
+  .nav-logo-text { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; }
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--gray-300);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .lang-toggle {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+    padding: 4px 2px;
+    overflow: hidden;
+  }
+  .lang-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600;
+    color: var(--gray-300);
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--white); color: #000; }
+  .nav-cta {
+    background: var(--orange);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span { width: 20px; height: 1.5px; background: var(--white); display: block; transition: all 0.3s; }
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    z-index: 99;
+    padding: 24px 32px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  /* ---- HERO ---- */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 32px 80px;
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(200,90,20,0.4);
+    background: rgba(200,90,20,0.07);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--orange);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    opacity: 0;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+  .hero-h1 {
+    font-size: clamp(3rem, 8vw, 7.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px;
+    opacity: 0;
+  }
+  .hero-h1 .line { display: block; overflow: hidden; }
+  .hero-h1 .word { display: inline-block; }
+  .hero-h1 .accent { color: var(--orange); }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--gray-300);
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 auto 48px;
+    font-weight: 400;
+    opacity: 0;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+  }
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-outline {
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.04); }
+  .hero-pills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 64px;
+    opacity: 0;
+  }
+  .pill {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-200);
+  }
+  .pill .pill-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+  /* ---- SECTION LABELS ---- */
+  .section-label {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange) !important;
+    color: var(--gray-400);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--orange);
+  }
+
+  /* ---- DIVIDER ---- */
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); }
+
+  /* ---- AI POWERED BANNER ---- */
+  #ai-banner {
+    padding: 80px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    z-index: 2;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    width: max-content;
+    animation: marquee 25s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 48px;
+    white-space: nowrap;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: rgba(255,255,255,0.08);
+  }
+  .marquee-item .highlight { color: var(--orange); }
+  .marquee-separator { color: rgba(255,255,255,0.15); }
+
+  /* ---- ABOUT ---- */
+  #about { padding: 120px 0; }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-left h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin-bottom: 24px;
+  }
+  .about-left p {
+    color: var(--gray-300);
+    line-height: 1.7;
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  .ai-powered-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 24px;
+    border: 1px solid rgba(0,212,255,0.25);
+    background: rgba(0,212,255,0.04);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cyan);
+  }
+  .ai-powered-badge .icon { font-size: 16px; }
+  .founders-list { display: flex; flex-direction: column; gap: 16px; }
+  .founder-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 20px;
+    background: rgba(255,255,255,0.02);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.3s;
+  }
+  .founder-card:hover { border-color: rgba(255,255,255,0.14); }
+  .founder-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .founder-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .founder-info p { font-size: 12px; color: var(--gray-400); }
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 40px;
+  }
+  .metric-cell {
+    background: #000;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .metric-number {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .metric-label { font-size: 11px; color: var(--gray-400); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* ---- BUSINESS ---- */
+  #business { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .business-header { max-width: 640px; margin-bottom: 64px; }
+  .business-header h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .business-header p { color: var(--gray-300); font-size: 15px; line-height: 1.7; }
+  .vertical-block { margin-bottom: 4px; }
+  .vertical-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 28px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px 14px 0 0;
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .vertical-block.open .vertical-header { border-radius: 14px 14px 0 0; }
+  .vertical-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .vertical-title { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; flex: 1; }
+  .vertical-num { font-size: 11px; color: var(--gray-400); font-weight: 600; letter-spacing: 0.1em; }
+  .vertical-arrow { font-size: 18px; color: var(--gray-400); transition: transform 0.3s; }
+  .vertical-block.open .vertical-arrow { transform: rotate(180deg); }
+  .vertical-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+  }
+  .vertical-block.open .vertical-body { max-height: 600px; }
+  .angle-tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .angle-tab {
+    flex: 1;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    color: var(--gray-400);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+    text-align: center;
+  }
+  .angle-tab:last-child { border-right: none; }
+  .angle-tab.active { color: var(--white); background: rgba(255,255,255,0.04); }
+  .angle-content { padding: 32px 28px; }
+  .angle-panel { display: none; }
+  .angle-panel.active { display: block; }
+  .angle-panel p {
+    color: var(--gray-300);
+    font-size: 14px;
+    line-height: 1.75;
+    margin-bottom: 24px;
+    max-width: 640px;
+  }
+  .btn-angle {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    letter-spacing: -0.01em;
+  }
+  .btn-angle:hover { opacity: 0.8; }
+
+  /* ---- SOFTWARE ---- */
+  #software { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .software-header { max-width: 640px; margin-bottom: 64px; }
+  .software-header h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .software-header p { color: var(--gray-300); font-size: 15px; line-height: 1.7; }
+  .software-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .sw-card {
+    background: #000;
+    padding: 32px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .sw-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(200,90,20,0.04), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .sw-card:hover::before { opacity: 1; }
+  .sw-card:hover { background: rgba(255,255,255,0.015); }
+  .sw-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .sw-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid;
+  }
+  .sw-icon { font-size: 32px; }
+  .sw-card h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px; }
+  .sw-card p { color: var(--gray-300); font-size: 13px; line-height: 1.65; margin-bottom: 24px; }
+  .sw-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600;
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .sw-link:hover { gap: 10px; }
+  .sw-mockup {
+    height: 80px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--gray-400);
+    margin-bottom: 20px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---- SOCIAL ---- */
+  #social { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .social-inner { text-align: center; }
+  .social-inner h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .social-inner > p {
+    color: var(--gray-300);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto 16px;
+  }
+  .ai-line {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--cyan); font-weight: 600;
+    margin-bottom: 56px;
+  }
+  .social-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .social-card {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 24px 32px;
+    text-decoration: none;
+    color: var(--white);
+    display: flex; align-items: center; gap: 14px;
+    min-width: 180px;
+    transition: border-color 0.25s, background 0.25s, transform 0.25s;
+    background: rgba(255,255,255,0.01);
+  }
+  .social-card:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.04);
+    transform: translateY(-2px);
+  }
+  .social-card-icon { font-size: 24px; }
+  .social-card-name { font-size: 14px; font-weight: 700; }
+  .social-card-handle { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ---- PROOF ---- */
+  #proof { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
+  .proof-header { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+  .proof-header h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .proof-header p { color: var(--gray-300); font-size: 15px; line-height: 1.7; }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 64px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .stat-cell {
+    flex: 1;
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .stat-cell + .stat-cell { border-left: 1px solid rgba(255,255,255,0.07); }
+  .stat-number {
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    margin-bottom: 6px;
+    color: var(--white);
+  }
+  .stat-label { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+
+  /* Marquee testimonials */
+  .testimonials-marquee-wrap {
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .testimonials-marquee-wrap::before,
+  .testimonials-marquee-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 120px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .testimonials-marquee-wrap::before { left: 0; background: linear-gradient(to right, #0a0a0a, transparent); }
+  .testimonials-marquee-wrap::after  { right: 0; background: linear-gradient(to left, #0a0a0a, transparent); }
+
+  .testimonials-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: marqueeScroll 40s linear infinite;
+  }
+  .testimonials-track:hover { animation-play-state: paused; }
+
+  .testimonials-track-reverse {
+    animation: marqueeScrollReverse 45s linear infinite;
+  }
+
+  @keyframes marqueeScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marqueeScrollReverse {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
+  .testimonial-card {
+    flex-shrink: 0;
+    width: 360px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 28px;
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .testimonial-card:hover {
+    border-color: rgba(240,180,41,0.3);
+    transform: translateY(-4px);
+  }
+  .testimonial-card .quote-icon {
+    font-size: 28px;
+    color: var(--gold);
+    opacity: 0.5;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .testimonial-card p {
+    color: var(--gray-200);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .testimonial-meta { display: flex; align-items: center; gap: 12px; }
+  .testimonial-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .testimonial-name { font-size: 14px; font-weight: 700; }
+  .testimonial-vertical { font-size: 11px; color: var(--gray-400); }
+  .testimonials-row { margin-bottom: 24px; }
+
+  /* ---- FAQ ---- */
+  #faq { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .faq-inner { max-width: 720px; }
+  .faq-inner h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 48px;
+  }
+  .faq-item { border-top: 1px solid rgba(255,255,255,0.07); }
+  .faq-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .faq-q {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 0;
+    background: none; border: none;
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-align: left;
+    gap: 16px;
+    transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--gray-100); }
+  .faq-icon { font-size: 20px; color: var(--gray-400); flex-shrink: 0; transition: transform 0.3s; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a p {
+    color: var(--gray-300);
+    font-size: 14px;
+    line-height: 1.75;
+    padding-bottom: 24px;
+    max-width: 580px;
+  }
+
+  /* ---- CONTACT ---- */
+  #contact { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .contact-inner { text-align: center; margin-bottom: 64px; }
+  .contact-inner h2 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .contact-inner p { color: var(--gray-300); font-size: 15px; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .contact-card {
+    background: #000;
+    padding: 40px 32px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .contact-card:hover { background: rgba(255,255,255,0.02); }
+  .contact-card-icon { font-size: 32px; margin-bottom: 16px; }
+  .contact-card h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .contact-card p { color: var(--gray-400); font-size: 13px; margin-bottom: 24px; line-height: 1.6; }
+  .contact-badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 700;
+    background: var(--white); color: #000;
+    padding: 3px 10px; border-radius: 100px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .contact-btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    letter-spacing: -0.01em;
+  }
+  .contact-btn:hover { opacity: 0.8; }
+  .form-wrapper {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 48px;
+    background: rgba(255,255,255,0.01);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .form-wrapper h3 {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 12px; font-weight: 600;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: rgba(255,255,255,0.25); }
+  .form-group textarea { resize: none; height: 100px; }
+  .form-group select option { background: #111; }
+  .form-submit {
+    width: 100%;
+    background: var(--white);
+    color: #000;
+    border: none;
+    border-radius: 100px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    letter-spacing: -0.02em;
+    transition: opacity 0.2s;
+    margin-top: 8px;
+  }
+  .form-submit:hover { opacity: 0.85; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    position: relative;
+    z-index: 10;
+    background: #070707;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 64px 0 32px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand p {
+    color: var(--gray-400);
+    font-size: 13px;
+    line-height: 1.7;
+    margin-top: 16px;
+    max-width: 280px;
+  }
+  .footer-col-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--gray-400);
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.2s, padding-left 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); padding-left: 4px; }
+  .footer-social {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .footer-social a {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray-400);
+    text-decoration: none;
+    font-size: 14px;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .footer-social a:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(240,180,41,0.08);
+  }
+  .footer-divider {
+    border: none;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 24px;
+  }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-copy { font-size: 12px; color: var(--gray-500); }
+  .footer-bottom-links { display: flex; gap: 24px; }
+  .footer-bottom-links a {
+    font-size: 12px;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-bottom-links a:hover { color: var(--white); }
+  @media(max-width:768px) {
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+  @media(max-width:480px) {
+    .footer-top { grid-template-columns: 1fr; gap: 28px; }
+  }
+
+  /* ---- GSAP init ---- */
+  .will-animate { opacity: 0; transform: translateY(30px); }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 768px) {
+    .nav-links, .nav-right { display: none; }
+    .hamburger { display: flex; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .stats-row { flex-wrap: wrap; }
+    .stat-cell { min-width: 45%; }
+    .testimonial-card { width: 300px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .software-grid { grid-template-columns: 1fr; }
+    .stats-row { flex-wrap: wrap; }
+    .stats-row .stat-cell { flex: 1 1 45%; }
+    .stats-row .stat-cell + .stat-cell { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
+    .form-row { grid-template-columns: 1fr; }
+    .form-wrapper { padding: 28px 20px; }
+    .container { padding: 0 20px; }
+    .angle-tab { font-size: 10px; padding: 12px 10px; }
+    .social-grid { gap: 10px; }
+    .social-card { min-width: 140px; padding: 18px 20px; }
+  }
+
+  /* ============================================================
+     LOADER
+  ============================================================ */
+  #loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #000;
+    pointer-events: all;
+  }
+  #loader-canvas { width: 100%; height: 100%; display: block; }
+  #loader-flash {
+    position: absolute; inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.is-loading,
+  body.is-loading { overflow: hidden; height: 100%; }
+
+  /* ============================================================
+     LIQUID GLASS SYSTEM
+  ============================================================ */
+
+  /* Minimal dark veil — text readable, stars fully visible */
+  #about, #business, #software, #social, #social-proof, #faq, #contact {
+    background: rgba(0, 2, 10, 0.08);
+  }
+  #hero {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* Glass card mixin — applies to all card-like elements */
+  .sw-card,
+  .founder-card,
+  .contact-card,
+  .testimonial-card,
+  .faq-item,
+  .social-card,
+  .business-card,
+  .vertical-header,
+  .vertical-body {
+    background: rgba(255,255,255,0.03) !important;
+    backdrop-filter: blur(24px) saturate(1.6) brightness(1.08);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(1.08);
+    border: 1px solid rgba(255,255,255,0.09) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.10),
+      inset 0 -1px 0 rgba(0,0,0,0.18),
+      0 8px 40px rgba(0,0,0,0.50);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Refraction rim — top edge highlight (liquid glass signature) */
+  .sw-card::before,
+  .founder-card::before,
+  .contact-card::before,
+  .testimonial-card::before,
+  .faq-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,255,255,0.20) 25%,
+      rgba(255,255,255,0.32) 50%,
+      rgba(255,255,255,0.20) 75%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Inner diagonal sheen — top-left light bounce */
+  .sw-card::after,
+  .founder-card::after,
+  .contact-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      rgba(255,255,255,0.06) 0%,
+      rgba(255,255,255,0.02) 35%,
+      transparent 60%
+    );
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Metric cells glass */
+  .metric-cell {
+    background: rgba(255,255,255,0.025) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Navbar already has blur — just strengthen the glass border */
+  nav {
+    border-bottom: 1px solid rgba(255,255,255,0.09) !important;
+    box-shadow: 0 1px 40px rgba(0,0,0,0.5);
+  }
+
+  /* Form wrapper glass */
+  .form-wrapper {
+    background: rgba(255,255,255,0.025) !important;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 40px rgba(0,0,0,0.5);
+  }
+</style>
+</head>
+
+<body>
+
+<!-- CANVAS BACKGROUND -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAVBAR -->
+<!-- LOADER -->
+<div id="loader">
+  <canvas id="loader-canvas"></canvas>
+  <div id="loader-flash"></div>
+</div>
+
+<nav id="navbar">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <span class="nav-wordmark"><span class="nav-wordmark-power">POWER</span><span class="nav-wordmark-agency">AGENCY</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about" data-it="Chi Siamo" data-en="About">Chi Siamo</a></li>
+      <li><a href="#business" data-it="Business" data-en="Business">Business</a></li>
+      <li><a href="#software" data-it="Software" data-en="Software">Software</a></li>
+      <li><a href="#social" data-it="Social" data-en="Social">Social</a></li>
+      <li><a href="#contact" data-it="Contatti" data-en="Contact">Contatti</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-it" onclick="setLang('it')">IT</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#contact" class="nav-cta" data-it="Prenota Call" data-en="Book a Call">Prenota Call</a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" class="mobile-menu">
+  <a href="#about" onclick="toggleMenu()" data-it="Chi Siamo" data-en="About">Chi Siamo</a>
+  <a href="#business" onclick="toggleMenu()" data-it="Business" data-en="Business">Business</a>
+  <a href="#software" onclick="toggleMenu()" data-it="Software" data-en="Software">Software</a>
+  <a href="#social" onclick="toggleMenu()" data-it="Social" data-en="Social">Social</a>
+  <a href="#contact" onclick="toggleMenu()" data-it="Contatti" data-en="Contact">Contatti</a>
+  <div style="display:flex;gap:12px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06)">
+    <button onclick="setLang('it');toggleMenu()" style="background:none;border:none;color:#fff;font-family:Inter,sans-serif;font-weight:700;font-size:14px;cursor:pointer">IT</button>
+    <button onclick="setLang('en');toggleMenu()" style="background:none;border:none;color:#555;font-family:Inter,sans-serif;font-weight:700;font-size:14px;cursor:pointer">EN</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span data-it="Entirely AI-Powered" data-en="Entirely AI-Powered">Entirely AI-Powered</span>
+    </div>
+    <h1 class="hero-h1">
+      <span class="line"><span class="word" data-it="Costruiamo." data-en="Build.">Costruiamo.</span></span>
+      <span class="line"><span class="word accent" data-it="Scaliamo." data-en="Scale.">Scaliamo.</span></span>
+      <span class="line"><span class="word" data-it="Collaboriamo." data-en="Partner.">Collaboriamo.</span></span>
+    </h1>
+    <p class="hero-sub"
+       data-it="Un'agenzia tech di tre persone. Tre verticali, tre tipi di opportunità. Software, formazione e collaborazione diretta."
+       data-en="A three-person tech agency. Three verticals, three types of opportunity. Software, training, and direct collaboration.">
+      Un'agenzia tech di tre persone. Tre verticali, tre tipi di opportunità. Software, formazione e collaborazione diretta.
+    </p>
+    <div class="hero-actions">
+      <a href="#business" class="btn-primary" data-it="Esplora i Business" data-en="Explore our Business">Esplora i Business</a>
+      <a href="#contact" class="btn-outline" data-it="Prenota una Call" data-en="Book a Call">Prenota una Call</a>
+    </div>
+    <div class="hero-pills">
+      <div class="pill">
+        <span class="pill-dot" style="background:#10b981"></span>
+        <span data-it="E-Commerce" data-en="E-Commerce">E-Commerce</span>
+      </div>
+      <div class="pill">
+        <span class="pill-dot" style="background:#a855f7"></span>
+        <span data-it="Prop Firm" data-en="Prop Firm">Prop Firm</span>
+      </div>
+      <div class="pill">
+        <span class="pill-dot" style="background:#00d4ff"></span>
+        <span data-it="Intelligenza Artificiale" data-en="Artificial Intelligence">Intelligenza Artificiale</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI POWERED MARQUEE -->
+<div id="ai-banner">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item">ENTIRELY <span class="highlight">AI-POWERED</span> <span class="marquee-separator">—</span></span>
+    <span class="marquee-item">E-COMMERCE <span class="marquee-separator">·</span></span>
+    <span class="marquee-item">PROP FIRM HEDGING <span class="marquee-separator">·</span></span>
+    <span class="marquee-item">ARTIFICIAL INTELLIGENCE <span class="marquee-separator">—</span></span>
+    <span class="marquee-item">ENTIRELY <span class="highlight">AI-POWERED</span> <span class="marquee-separator">—</span></span>
+    <span class="marquee-item">E-COMMERCE <span class="marquee-separator">·</span></span>
+    <span class="marquee-item">PROP FIRM HEDGING <span class="marquee-separator">·</span></span>
+    <span class="marquee-item">ARTIFICIAL INTELLIGENCE <span class="marquee-separator">—</span></span>
+  </div>
+</div>
+
+<!-- CHI SIAMO -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-left will-animate">
+        <div class="section-label" data-it="Chi Siamo" data-en="About Us">Chi Siamo</div>
+        <h2 data-it="Un'agenzia. Tre verticali. Nessun compromesso."
+            data-en="One agency. Three verticals. No compromises.">
+          Un'agenzia. Tre verticali. Nessun compromesso.
+        </h2>
+        <p data-it="Power Agency nasce dall'unione di tre professionisti con esperienze dirette in e-commerce, trading su prop firm e intelligenza artificiale."
+           data-en="Power Agency was born from the union of three professionals with direct experience in e-commerce, prop firm trading, and artificial intelligence.">
+          Power Agency nasce dall'unione di tre professionisti con esperienze dirette in e-commerce, trading su prop firm e intelligenza artificiale.
+        </p>
+        <p data-it="Non vendiamo teorie: operiamo ogni giorno negli stessi mercati che ti insegnamo. I nostri processi, strumenti e sistemi sono interamente costruiti con l'AI."
+           data-en="We don't sell theories: we operate every day in the same markets we teach you. Our processes, tools, and systems are entirely built with AI.">
+          Non vendiamo teorie: operiamo ogni giorno negli stessi mercati che ti insegnamo. I nostri processi, strumenti e sistemi sono interamente costruiti con l'AI.
+        </p>
+        <div class="ai-powered-badge">
+          <span class="icon">⚡</span>
+          <span data-it="Interamente AI-Powered — Automazioni, agenti e sistemi intelligenti al centro di ogni nostro processo."
+                data-en="Entirely AI-Powered — Automations, agents and intelligent systems at the heart of every process.">
+            Interamente AI-Powered — Automazioni, agenti e sistemi intelligenti al centro di ogni nostro processo.
+          </span>
+        </div>
+        <div class="metrics-row will-animate" style="margin-top:40px">
+          <div class="metric-cell">
+            <div class="metric-number counter" data-target="3">0</div>
+            <div class="metric-label" data-it="Verticali" data-en="Verticals">Verticali</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-number counter" data-target="6">0</div>
+            <div class="metric-label" data-it="Software" data-en="Software">Software</div>
+          </div>
+          <div class="metric-cell">
+            <div class="metric-number counter" data-target="50">0</div>
+            <div class="metric-label" data-it="Clienti" data-en="Clients">Clienti</div>
+          </div>
+        </div>
+      </div>
+      <div class="will-animate">
+        <div class="section-label" style="margin-bottom:20px" data-it="Il Team" data-en="The Team">Il Team</div>
+        <div class="founders-list">
+          <div class="founder-card">
+            <div class="founder-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">VI</div>
+            <div class="founder-info">
+              <h4 data-it="Vincenzo" data-en="Vincenzo">Vincenzo</h4>
+              <p data-it="E-Commerce" data-en="E-Commerce">E-Commerce</p>
+            </div>
+          </div>
+          <div class="founder-card">
+            <div class="founder-avatar" style="background:rgba(168,85,247,0.15);color:var(--purple)">WA</div>
+            <div class="founder-info">
+              <h4 data-it="Wassim" data-en="Wassim">Wassim</h4>
+              <p data-it="Prop Firm" data-en="Prop Firm">Prop Firm</p>
+            </div>
+          </div>
+          <div class="founder-card">
+            <div class="founder-avatar" style="background:rgba(0,212,255,0.12);color:#00d4ff">MA</div>
+            <div class="founder-info">
+              <h4 data-it="Mattia" data-en="Mattia">Mattia</h4>
+              <p data-it="AI" data-en="AI">AI</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- I 3 BUSINESS -->
+<section id="business">
+  <div class="container">
+    <div class="business-header will-animate">
+      <div class="section-label" data-it="I Nostri Business" data-en="Our Business">I Nostri Business</div>
+      <h2 data-it="Tre verticali, tre modi di lavorare con noi."
+          data-en="Three verticals, three ways to work with us.">
+        Tre verticali, tre modi di lavorare con noi.
+      </h2>
+      <p data-it="Per ogni business scegli il tuo punto d'ingresso: acquista il software, fatti formare, oppure collabora direttamente con noi."
+         data-en="For each business, choose your entry point: buy the software, get trained, or collaborate directly with us.">
+        Per ogni business scegli il tuo punto d'ingresso: acquista il software, fatti formare, oppure collabora direttamente con noi.
+      </p>
+    </div>
+
+    <!-- E-Commerce -->
+    <div class="vertical-block will-animate" id="vblock-ecom">
+      <div class="vertical-header" onclick="toggleVertical('ecom')">
+        <div class="vertical-icon" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)">🛒</div>
+        <div>
+          <div class="vertical-num">01</div>
+          <div class="vertical-title" data-it="E-Commerce" data-en="E-Commerce">E-Commerce</div>
+        </div>
+        <div style="flex:1"></div>
+        <div class="vertical-arrow">↓</div>
+      </div>
+      <div class="vertical-body" id="vbody-ecom">
+        <div class="angle-tabs">
+          <button class="angle-tab active" onclick="switchAngle('ecom','sw')" data-it="Il Software" data-en="The Software">Il Software</button>
+          <button class="angle-tab" onclick="switchAngle('ecom','consulting')" data-it="Consulenza &amp; Formazione" data-en="Consulting &amp; Training">Consulenza & Formazione</button>
+          <button class="angle-tab" onclick="switchAngle('ecom','collab')" data-it="Collabora con Noi" data-en="Partner with Us">Collabora con Noi</button>
+        </div>
+        <div class="angle-content">
+          <div class="angle-panel active" id="ecom-sw">
+            <p data-it="POWERECOM trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click."
+               data-en="POWERECOM finds the winning product via scraping, generates copy with AI and launches your Shopify store. Ready in 3 clicks.">
+              POWERECOM trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
+            </p>
+            <a href="#software" class="btn-angle" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)"
+               data-it="Scopri il Software →" data-en="Explore the Software →">Scopri il Software →</a>
+          </div>
+          <div class="angle-panel" id="ecom-consulting">
+            <p data-it="Il nostro percorso 1:1 ti guida dalla scelta del prodotto alla prima vendita, fino allo scaling. 8 settimane fianco a fianco con chi gestisce store da 6 cifre al mese."
+               data-en="Our 1:1 path guides you from product selection to first sale, all the way to scaling. 8 weeks side by side with people running 6-figure monthly stores.">
+              Il nostro percorso 1:1 ti guida dalla scelta del prodotto alla prima vendita, fino allo scaling. 8 settimane fianco a fianco con chi gestisce store da 6 cifre al mese.
+            </p>
+            <a href="#contact" class="btn-angle" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)"
+               data-it="Prenota una Call →" data-en="Book a Call →">Prenota una Call →</a>
+          </div>
+          <div class="angle-panel" id="ecom-collab">
+            <p data-it="Entra nel nostro team come partner operativo. Gestiamo insieme store in dropshipping e wholesale, dividendo effort e ricavi. Cerchiamo persone motivate, con o senza esperienza."
+               data-en="Join our team as an operational partner. We manage dropshipping and wholesale stores together, sharing effort and revenue. We're looking for motivated people, with or without prior experience.">
+              Entra nel nostro team come partner operativo. Gestiamo insieme store in dropshipping e wholesale, dividendo effort e ricavi. Cerchiamo persone motivate, con o senza esperienza.
+            </p>
+            <a href="#contact" class="btn-angle" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)"
+               data-it="Parliamone →" data-en="Let's talk →">Parliamone →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prop Firm -->
+    <div class="vertical-block will-animate" id="vblock-prop" style="margin-top:4px">
+      <div class="vertical-header" onclick="toggleVertical('prop')">
+        <div class="vertical-icon" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2)">📈</div>
+        <div>
+          <div class="vertical-num">02</div>
+          <div class="vertical-title" data-it="Prop Firm Hedging" data-en="Prop Firm Hedging">Prop Firm Hedging</div>
+        </div>
+        <div style="flex:1"></div>
+        <div class="vertical-arrow">↓</div>
+      </div>
+      <div class="vertical-body" id="vbody-prop">
+        <div class="angle-tabs">
+          <button class="angle-tab active" onclick="switchAngle('prop','sw')" data-it="Il Software" data-en="The Software">Il Software</button>
+          <button class="angle-tab" onclick="switchAngle('prop','consulting')" data-it="Consulenza &amp; Formazione" data-en="Consulting &amp; Training">Consulenza & Formazione</button>
+          <button class="angle-tab" onclick="switchAngle('prop','collab')" data-it="Collabora con Noi" data-en="Partner with Us">Collabora con Noi</button>
+        </div>
+        <div class="angle-content">
+          <div class="angle-panel active" id="prop-sw">
+            <p data-it="POWERHEDGING monitora in tempo reale tutti i tuoi account MT5 — balance, trade aperti, anomalie — registra il bilancio e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine."
+               data-en="POWERHEDGING monitors all your MT5 accounts in real time — balance, open trades, anomalies — logs the balance and automatically generates lot size, TP and SL for each paired trade. You just place the order.">
+              POWERHEDGING monitora in tempo reale tutti i tuoi account MT5 — balance, trade aperti, anomalie — registra il bilancio e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
+            </p>
+            <a href="#software" class="btn-angle" style="background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2)"
+               data-it="Scopri il Software →" data-en="Explore the Software →">Scopri il Software →</a>
+          </div>
+          <div class="angle-panel" id="prop-consulting">
+            <p data-it="Un percorso completo per imparare a fare hedging su prop firm: dalla teoria matematica alla pratica operativa. Accedi alle stesse strategie che usiamo sui nostri account reali."
+               data-en="A complete path to learn prop firm hedging: from the mathematical theory to real operations. Access the exact same strategies we use on our own accounts.">
+              Un percorso completo per imparare a fare hedging su prop firm: dalla teoria matematica alla pratica operativa. Accedi alle stesse strategie che usiamo sui nostri account reali.
+            </p>
+            <a href="#contact" class="btn-angle" style="background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2)"
+               data-it="Prenota una Call →" data-en="Book a Call →">Prenota una Call →</a>
+          </div>
+          <div class="angle-panel" id="prop-collab">
+            <p data-it="Due modelli di collaborazione. Hai capitale? Noi gestiamo la strategia con POWERHEDGING, tu fornisci i fondi e dividiamo i profitti. Non hai capitale? Forniamo noi i fondi e sei tu a operare con il nostro software — revenue share in entrambi i casi."
+               data-en="Two collaboration models. Have capital? We manage the strategy with POWERHEDGING, you provide the funds and we split profits. No capital? We provide the funds and you operate with our software — revenue share either way.">
+              Due modelli di collaborazione. Hai capitale? Noi gestiamo la strategia con POWERHEDGING, tu fornisci i fondi e dividiamo i profitti. Non hai capitale? Forniamo noi i fondi e sei tu a operare con il nostro software — revenue share in entrambi i casi.
+            </p>
+            <a href="#contact" class="btn-angle" style="background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2)"
+               data-it="Parliamone →" data-en="Let's talk →">Parliamone →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI -->
+    <div class="vertical-block will-animate" id="vblock-ai" style="margin-top:4px">
+      <div class="vertical-header" onclick="toggleVertical('ai')">
+        <div class="vertical-icon" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2)">🤖</div>
+        <div>
+          <div class="vertical-num">03</div>
+          <div class="vertical-title" data-it="Intelligenza Artificiale" data-en="Artificial Intelligence">Intelligenza Artificiale</div>
+        </div>
+        <div style="flex:1"></div>
+        <div class="vertical-arrow">↓</div>
+      </div>
+      <div class="vertical-body" id="vbody-ai">
+        <div class="angle-tabs">
+          <button class="angle-tab active" onclick="switchAngle('ai','sw')" data-it="Il Software" data-en="The Software">Il Software</button>
+          <button class="angle-tab" onclick="switchAngle('ai','consulting')" data-it="Consulenza &amp; Formazione" data-en="Consulting &amp; Training">Consulenza & Formazione</button>
+          <button class="angle-tab" onclick="switchAngle('ai','collab')" data-it="Collabora con Noi" data-en="Partner with Us">Collabora con Noi</button>
+        </div>
+        <div class="angle-content">
+          <div class="angle-panel active" id="ai-sw">
+            <p data-it="POWERLEADS è il nostro sistema di lead generation AI: scraper, qualificatore e outreach automatico su più canali. Genera prospect qualificati 24/7 senza intervento umano."
+               data-en="POWERLEADS is our AI lead generation system: scraper, qualifier and automatic outreach across multiple channels. Generates qualified prospects 24/7 with zero human input.">
+              POWERLEADS è il nostro sistema di lead generation AI: scraper, qualificatore e outreach automatico su più canali. Genera prospect qualificati 24/7 senza intervento umano.
+            </p>
+            <a href="#software" class="btn-angle" style="background:rgba(0,212,255,0.08);color:#00d4ff;border:1px solid rgba(0,212,255,0.2)"
+               data-it="Scopri il Software →" data-en="Explore the Software →">Scopri il Software →</a>
+          </div>
+          <div class="angle-panel" id="ai-consulting">
+            <p data-it="Insegniamo ai team aziendali a integrare l'AI nei loro workflow. Dal prompt engineering all'automazione con agenti custom. Risultati misurabili nel tuo processo entro 30 giorni."
+               data-en="We teach business teams to integrate AI into their workflows. From prompt engineering to automation with custom agents. Measurable results in your process within 30 days.">
+              Insegniamo ai team aziendali a integrare l'AI nei loro workflow. Dal prompt engineering all'automazione con agenti custom. Risultati misurabili nel tuo processo entro 30 giorni.
+            </p>
+            <a href="#contact" class="btn-angle" style="background:rgba(0,212,255,0.08);color:#00d4ff;border:1px solid rgba(0,212,255,0.2)"
+               data-it="Prenota una Call →" data-en="Book a Call →">Prenota una Call →</a>
+          </div>
+          <div class="angle-panel" id="ai-collab">
+            <p data-it="Vuoi lavorare con noi? Ti affidiamo progetti reali da gestire in autonomia, anche se parti da zero. Ti formiamo, ti supportiamo e ti diamo gli strumenti. Tu esegui, noi dividiamo i risultati."
+               data-en="Want to work with us? We assign you real projects to manage independently, even if you're starting from scratch. We train you, support you and give you the tools. You execute, we share the results.">
+              Vuoi lavorare con noi? Ti affidiamo progetti reali da gestire in autonomia, anche se parti da zero. Ti formiamo, ti supportiamo e ti diamo gli strumenti. Tu esegui, noi dividiamo i risultati.
+            </p>
+            <a href="#contact" class="btn-angle" style="background:rgba(0,212,255,0.08);color:#00d4ff;border:1px solid rgba(0,212,255,0.2)"
+               data-it="Parliamone →" data-en="Let's talk →">Parliamone →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SOFTWARE -->
+<section id="software">
+  <div class="container">
+    <div class="software-header will-animate">
+      <div class="section-label" data-it="I Nostri Strumenti" data-en="Our Tools">I Nostri Strumenti</div>
+      <h2 data-it="Software costruiti sul campo." data-en="Software built in the field.">
+        Software costruiti sul campo.
+      </h2>
+      <p data-it="Ogni tool che vendiamo nasce da un'esigenza reale dei nostri business. Li usiamo ogni giorno prima ancora di proporli."
+         data-en="Every tool we sell was born from a real need in our businesses. We use them every day before even offering them.">
+        Ogni tool che vendiamo nasce da un'esigenza reale dei nostri business. Li usiamo ogni giorno prima ancora di proporli.
+      </p>
+    </div>
+    <div class="software-grid">
+      <div class="sw-card will-animate">
+        <div class="sw-card-top">
+          <span class="sw-badge" style="background:rgba(16,185,129,0.08);color:#10b981;border-color:rgba(16,185,129,0.2)"
+                data-it="E-Commerce" data-en="E-Commerce">E-Commerce</span>
+          <span class="sw-icon">🛒</span>
+        </div>
+        <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
+        <h3 data-it="POWERECOM" data-en="POWERECOM">POWERECOM</h3>
+        <p data-it="Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click."
+           data-en="Finds the winning product via scraping, generates copy with AI and launches your Shopify store. Ready in 3 clicks.">
+          Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
+        </p>
+        <a href="[URL]" target="_blank" class="sw-link" style="color:#10b981"
+           data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
+      </div>
+      <div class="sw-card will-animate">
+        <div class="sw-card-top">
+          <span class="sw-badge" style="background:rgba(168,85,247,0.08);color:#a855f7;border-color:rgba(168,85,247,0.2)"
+                data-it="Prop Firm" data-en="Prop Firm">Prop Firm</span>
+          <span class="sw-icon">📈</span>
+        </div>
+        <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
+        <h3 data-it="POWERHEDGING" data-en="POWERHEDGING">POWERHEDGING</h3>
+        <p data-it="Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine."
+           data-en="Monitors all your MT5 accounts in real time, manages records, notifies anomalies and automatically generates lot size, TP and SL for each paired trade. You just place the order.">
+          Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
+        </p>
+        <a href="[URL]" target="_blank" class="sw-link" style="color:#a855f7"
+           data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
+      </div>
+      <div class="sw-card will-animate">
+        <div class="sw-card-top">
+          <span class="sw-badge" style="background:rgba(0,212,255,0.08);color:#00d4ff;border-color:rgba(0,212,255,0.2)"
+                data-it="AI" data-en="AI">AI</span>
+          <span class="sw-icon">🤖</span>
+        </div>
+        <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
+        <h3 data-it="POWERLEADS" data-en="POWERLEADS">POWERLEADS</h3>
+        <p data-it="Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura."
+           data-en="Finds, qualifies and contacts leads tailored to your business. Three integrated AI modules — scraping, scoring and outreach — running in a loop while you focus on closing.">
+          Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura.
+        </p>
+        <a href="[URL]" target="_blank" class="sw-link" style="color:#00d4ff"
+           data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social">
+  <div class="container">
+    <div class="social-inner">
+      <div class="section-label" style="justify-content:center" data-it="Seguici" data-en="Follow Us">Seguici</div>
+      <h2 class="will-animate"
+          data-it="Siamo su tutti i canali."
+          data-en="We're on every channel.">
+        Siamo su tutti i canali.
+      </h2>
+      <p class="will-animate"
+         data-it="Contenuti quotidiani su e-commerce, prop firm e AI. Ogni giorno condividiamo insight, strategie e aggiornamenti dai nostri business."
+         data-en="Daily content on e-commerce, prop firm, and AI. Every day we share insights, strategies, and updates from our businesses.">
+        Contenuti quotidiani su e-commerce, prop firm e AI. Ogni giorno condividiamo insight, strategie e aggiornamenti dai nostri business.
+      </p>
+      <div class="ai-line will-animate">
+        <span>⚡</span>
+        <span data-it="Ogni contenuto è creato e ottimizzato con l'AI" data-en="Every piece of content is created and optimized with AI">Ogni contenuto è creato e ottimizzato con l'AI</span>
+      </div>
+      <div class="social-grid will-animate">
+        <a href="https://www.instagram.com/poweragencyai/" target="_blank" class="social-card">
+          <span class="social-card-icon">📸</span>
+          <div>
+            <div class="social-card-name">Instagram</div>
+            <div class="social-card-handle">@[handle]</div>
+          </div>
+        </a>
+        <a href="[URL_TIKTOK]" target="_blank" class="social-card">
+          <span class="social-card-icon">🎵</span>
+          <div>
+            <div class="social-card-name">TikTok</div>
+            <div class="social-card-handle">@[handle]</div>
+          </div>
+        </a>
+        <a href="[URL_YOUTUBE]" target="_blank" class="social-card">
+          <span class="social-card-icon">▶️</span>
+          <div>
+            <div class="social-card-name">YouTube</div>
+            <div class="social-card-handle">@[handle]</div>
+          </div>
+        </a>
+
+        <a href="[URL_TELEGRAM]" target="_blank" class="social-card">
+          <span class="social-card-icon">✈️</span>
+          <div>
+            <div class="social-card-name">Telegram</div>
+            <div class="social-card-handle">@[handle]</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section id="proof">
+  <div class="container">
+    <div class="proof-header will-animate">
+      <div class="section-label" data-it="I Risultati" data-en="Results">I Risultati</div>
+      <h2 data-it="I numeri parlano chiaro." data-en="The numbers speak for themselves.">
+        I numeri parlano chiaro.
+      </h2>
+      <p data-it="Risultati reali, dai nostri business reali. Nessun caso studio inventato."
+         data-en="Real results, from our real businesses. No made-up case studies.">
+        Risultati reali, dai nostri business reali. Nessun caso studio inventato.
+      </p>
+    </div>
+    <div class="stats-row will-animate">
+      <div class="stat-cell">
+        <div class="stat-number" style="color:var(--green)">50+</div>
+        <div class="stat-label" data-it="Clienti attivi" data-en="Active clients">Clienti attivi</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number" style="color:var(--purple)">6</div>
+        <div class="stat-label" data-it="Software proprietari" data-en="Proprietary software">Software proprietari</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number" style="color:var(--green)">100k+</div>
+        <div class="stat-label" data-it="€ gestiti in e-com" data-en="€ managed in e-com">€ gestiti in e-com</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-number" style="color:var(--white)">1</div>
+        <div class="stat-label" data-it="Anni operativi" data-en="Years operating">Anni operativi</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 1: scorre a sinistra -->
+  <div class="testimonials-marquee-wrap testimonials-row">
+    <div class="testimonials-track" id="marquee-row-1">
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Con POWERECOM ho lanciato il mio primo store in meno di un giorno. Lo scraping ha trovato il prodotto, l'AI ha scritto tutto il copy. Ho fatto la prima vendita in 48 ore."
+           data-en="With POWERECOM I launched my first store in less than a day. The scraping found the product, AI wrote all the copy. I made my first sale within 48 hours.">
+          Con POWERECOM ho lanciato il mio primo store in meno di un giorno. Lo scraping ha trovato il prodotto, l'AI ha scritto tutto il copy. Ho fatto la prima vendita in 48 ore.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">LR</div>
+          <div>
+            <div class="testimonial-name">Luca R.</div>
+            <div class="testimonial-vertical">E-Commerce</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="POWERHEDGING mi ha cambiato il modo di lavorare sulle prop firm. Prima perdevo ore a calcolare i lotti manualmente. Adesso apro il software, vedo tutto in un colpo d'occhio e piazzo l'ordine."
+           data-en="POWERHEDGING changed the way I work on prop firms. I used to spend hours calculating lots manually. Now I open the software, see everything at a glance and place the order.">
+          POWERHEDGING mi ha cambiato il modo di lavorare sulle prop firm. Prima perdevo ore a calcolare i lotti manualmente. Adesso apro il software, vedo tutto in un colpo d'occhio e piazzo l'ordine.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(168,85,247,0.15);color:#a855f7">MF</div>
+          <div>
+            <div class="testimonial-name">Marco F.</div>
+            <div class="testimonial-vertical">Prop Firm</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Collaboro con il team AI di Power Agency da 3 mesi. Mi hanno affidato progetti reali fin da subito, nonostante partissi da zero. Sto imparando sul campo e guadagnando allo stesso tempo."
+           data-en="I've been working with the Power Agency AI team for 3 months. They assigned me real projects from day one, even though I started from scratch. I'm learning on the job and earning at the same time.">
+          Collaboro con il team AI di Power Agency da 3 mesi. Mi hanno affidato progetti reali fin da subito, nonostante partissi da zero. Sto imparando sul campo e guadagnando allo stesso tempo.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(0,212,255,0.12);color:#00d4ff">SC</div>
+          <div>
+            <div class="testimonial-name">Sara C.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Ho iniziato il percorso di consulenza e-commerce e in 2 settimane avevo già il mio store attivo. Il supporto del team è stato incredibile, risposte immediate a ogni dubbio."
+           data-en="I started the e-commerce consulting path and in 2 weeks I already had my store live. The team's support was incredible, instant answers to every question.">
+          Ho iniziato il percorso di consulenza e-commerce e in 2 settimane avevo già il mio store attivo. Il supporto del team è stato incredibile, risposte immediate a ogni dubbio.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">GT</div>
+          <div>
+            <div class="testimonial-name">Giorgio T.</div>
+            <div class="testimonial-vertical">E-Commerce</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Il software di hedging mi ha fatto risparmiare ore ogni settimana. L'interfaccia è chiara e i calcoli sono sempre precisi. Lo consiglio a chiunque lavori con le prop firm."
+           data-en="The hedging software saved me hours every week. The interface is clear and the calculations are always precise. I recommend it to anyone working with prop firms.">
+          Il software di hedging mi ha fatto risparmiare ore ogni settimana. L'interfaccia è chiara e i calcoli sono sempre precisi. Lo consiglio a chiunque lavori con le prop firm.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(168,85,247,0.15);color:#a855f7">AD</div>
+          <div>
+            <div class="testimonial-name">Andrea D.</div>
+            <div class="testimonial-vertical">Prop Firm</div>
+          </div>
+        </div>
+      </div>
+      <!-- Duplicati per loop continuo -->
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Con POWERECOM ho lanciato il mio primo store in meno di un giorno. Lo scraping ha trovato il prodotto, l'AI ha scritto tutto il copy. Ho fatto la prima vendita in 48 ore."
+           data-en="With POWERECOM I launched my first store in less than a day. The scraping found the product, AI wrote all the copy. I made my first sale within 48 hours.">
+          Con POWERECOM ho lanciato il mio primo store in meno di un giorno. Lo scraping ha trovato il prodotto, l'AI ha scritto tutto il copy. Ho fatto la prima vendita in 48 ore.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">LR</div>
+          <div>
+            <div class="testimonial-name">Luca R.</div>
+            <div class="testimonial-vertical">E-Commerce</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="POWERHEDGING mi ha cambiato il modo di lavorare sulle prop firm. Prima perdevo ore a calcolare i lotti manualmente. Adesso apro il software, vedo tutto in un colpo d'occhio e piazzo l'ordine."
+           data-en="POWERHEDGING changed the way I work on prop firms. I used to spend hours calculating lots manually. Now I open the software, see everything at a glance and place the order.">
+          POWERHEDGING mi ha cambiato il modo di lavorare sulle prop firm. Prima perdevo ore a calcolare i lotti manualmente. Adesso apro il software, vedo tutto in un colpo d'occhio e piazzo l'ordine.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(168,85,247,0.15);color:#a855f7">MF</div>
+          <div>
+            <div class="testimonial-name">Marco F.</div>
+            <div class="testimonial-vertical">Prop Firm</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Collaboro con il team AI di Power Agency da 3 mesi. Mi hanno affidato progetti reali fin da subito, nonostante partissi da zero. Sto imparando sul campo e guadagnando allo stesso tempo."
+           data-en="I've been working with the Power Agency AI team for 3 months. They assigned me real projects from day one, even though I started from scratch. I'm learning on the job and earning at the same time.">
+          Collaboro con il team AI di Power Agency da 3 mesi. Mi hanno affidato progetti reali fin da subito, nonostante partissi da zero. Sto imparando sul campo e guadagnando allo stesso tempo.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(0,212,255,0.12);color:#00d4ff">SC</div>
+          <div>
+            <div class="testimonial-name">Sara C.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Ho iniziato il percorso di consulenza e-commerce e in 2 settimane avevo già il mio store attivo. Il supporto del team è stato incredibile, risposte immediate a ogni dubbio."
+           data-en="I started the e-commerce consulting path and in 2 weeks I already had my store live. The team's support was incredible, instant answers to every question.">
+          Ho iniziato il percorso di consulenza e-commerce e in 2 settimane avevo già il mio store attivo. Il supporto del team è stato incredibile, risposte immediate a ogni dubbio.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">GT</div>
+          <div>
+            <div class="testimonial-name">Giorgio T.</div>
+            <div class="testimonial-vertical">E-Commerce</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Il software di hedging mi ha fatto risparmiare ore ogni settimana. L'interfaccia è chiara e i calcoli sono sempre precisi. Lo consiglio a chiunque lavori con le prop firm."
+           data-en="The hedging software saved me hours every week. The interface is clear and the calculations are always precise. I recommend it to anyone working with prop firms.">
+          Il software di hedging mi ha fatto risparmiare ore ogni settimana. L'interfaccia è chiara e i calcoli sono sempre precisi. Lo consiglio a chiunque lavori con le prop firm.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(168,85,247,0.15);color:#a855f7">AD</div>
+          <div>
+            <div class="testimonial-name">Andrea D.</div>
+            <div class="testimonial-vertical">Prop Firm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: scorre a destra (direzione opposta) -->
+  <div class="testimonials-marquee-wrap testimonials-row">
+    <div class="testimonials-track testimonials-track-reverse" id="marquee-row-2">
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Power Agency mi ha costruito un chatbot AI per il mio business in una settimana. I clienti lo adorano e il tasso di conversione è salito del 30%."
+           data-en="Power Agency built me an AI chatbot for my business in one week. Customers love it and the conversion rate went up 30%.">
+          Power Agency mi ha costruito un chatbot AI per il mio business in una settimana. I clienti lo adorano e il tasso di conversione è salito del 30%.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(99,102,241,0.15);color:#6366f1">FM</div>
+          <div>
+            <div class="testimonial-name">Federica M.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Grazie al corso 1:1 sulle prop firm ho capito finalmente come gestire il rischio. In un mese ho passato la mia prima challenge."
+           data-en="Thanks to the 1:1 prop firm course I finally understood risk management. In one month I passed my first challenge.">
+          Grazie al corso 1:1 sulle prop firm ho capito finalmente come gestire il rischio. In un mese ho passato la mia prima challenge.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(168,85,247,0.15);color:#a855f7">DP</div>
+          <div>
+            <div class="testimonial-name">Davide P.</div>
+            <div class="testimonial-vertical">Prop Firm</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="POWERLEADS ha automatizzato tutta la mia lead generation. Quello che facevo in 3 ore ora lo fa il software in 10 minuti. Risultati migliori, meno fatica."
+           data-en="POWERLEADS automated all my lead generation. What took me 3 hours now takes the software 10 minutes. Better results, less effort.">
+          POWERLEADS ha automatizzato tutta la mia lead generation. Quello che facevo in 3 ore ora lo fa il software in 10 minuti. Risultati migliori, meno fatica.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(99,102,241,0.15);color:#6366f1">EV</div>
+          <div>
+            <div class="testimonial-name">Elena V.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Ho scalato il mio store da 0 a 5k/mese grazie alla consulenza e-commerce. Il team mi ha seguito passo passo, dalla scelta del prodotto alla prima ads."
+           data-en="I scaled my store from 0 to 5k/month thanks to e-commerce consulting. The team followed me step by step, from product selection to the first ads.">
+          Ho scalato il mio store da 0 a 5k/mese grazie alla consulenza e-commerce. Il team mi ha seguito passo passo, dalla scelta del prodotto alla prima ads.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">NB</div>
+          <div>
+            <div class="testimonial-name">Nicola B.</div>
+            <div class="testimonial-vertical">E-Commerce</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="L'automazione AI che mi hanno sviluppato mi fa risparmiare almeno 15 ore a settimana. Un investimento che si è ripagato nel primo mese."
+           data-en="The AI automation they developed saves me at least 15 hours a week. An investment that paid for itself in the first month.">
+          L'automazione AI che mi hanno sviluppato mi fa risparmiare almeno 15 ore a settimana. Un investimento che si è ripagato nel primo mese.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(99,102,241,0.15);color:#6366f1">RC</div>
+          <div>
+            <div class="testimonial-name">Roberto C.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+      <!-- Duplicati per loop continuo -->
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Power Agency mi ha costruito un chatbot AI per il mio business in una settimana. I clienti lo adorano e il tasso di conversione è salito del 30%."
+           data-en="Power Agency built me an AI chatbot for my business in one week. Customers love it and the conversion rate went up 30%.">
+          Power Agency mi ha costruito un chatbot AI per il mio business in una settimana. I clienti lo adorano e il tasso di conversione è salito del 30%.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(99,102,241,0.15);color:#6366f1">FM</div>
+          <div>
+            <div class="testimonial-name">Federica M.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Grazie al corso 1:1 sulle prop firm ho capito finalmente come gestire il rischio. In un mese ho passato la mia prima challenge."
+           data-en="Thanks to the 1:1 prop firm course I finally understood risk management. In one month I passed my first challenge.">
+          Grazie al corso 1:1 sulle prop firm ho capito finalmente come gestire il rischio. In un mese ho passato la mia prima challenge.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(168,85,247,0.15);color:#a855f7">DP</div>
+          <div>
+            <div class="testimonial-name">Davide P.</div>
+            <div class="testimonial-vertical">Prop Firm</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="POWERLEADS ha automatizzato tutta la mia lead generation. Quello che facevo in 3 ore ora lo fa il software in 10 minuti. Risultati migliori, meno fatica."
+           data-en="POWERLEADS automated all my lead generation. What took me 3 hours now takes the software 10 minutes. Better results, less effort.">
+          POWERLEADS ha automatizzato tutta la mia lead generation. Quello che facevo in 3 ore ora lo fa il software in 10 minuti. Risultati migliori, meno fatica.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(99,102,241,0.15);color:#6366f1">EV</div>
+          <div>
+            <div class="testimonial-name">Elena V.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="Ho scalato il mio store da 0 a 5k/mese grazie alla consulenza e-commerce. Il team mi ha seguito passo passo, dalla scelta del prodotto alla prima ads."
+           data-en="I scaled my store from 0 to 5k/month thanks to e-commerce consulting. The team followed me step by step, from product selection to the first ads.">
+          Ho scalato il mio store da 0 a 5k/mese grazie alla consulenza e-commerce. Il team mi ha seguito passo passo, dalla scelta del prodotto alla prima ads.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">NB</div>
+          <div>
+            <div class="testimonial-name">Nicola B.</div>
+            <div class="testimonial-vertical">E-Commerce</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p data-it="L'automazione AI che mi hanno sviluppato mi fa risparmiare almeno 15 ore a settimana. Un investimento che si è ripagato nel primo mese."
+           data-en="The AI automation they developed saves me at least 15 hours a week. An investment that paid for itself in the first month.">
+          L'automazione AI che mi hanno sviluppato mi fa risparmiare almeno 15 ore a settimana. Un investimento che si è ripagato nel primo mese.
+        </p>
+        <div class="testimonial-meta">
+          <div class="testimonial-avatar" style="background:rgba(99,102,241,0.15);color:#6366f1">RC</div>
+          <div>
+            <div class="testimonial-name">Roberto C.</div>
+            <div class="testimonial-vertical">AI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-inner will-animate">
+      <div class="section-label" data-it="FAQ" data-en="FAQ">FAQ</div>
+      <h2 data-it="Domande frequenti." data-en="Frequently asked questions.">Domande frequenti.</h2>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="Come funziona la collaborazione con Power Agency?"
+                data-en="How does collaboration with Power Agency work?">Come funziona la collaborazione con Power Agency?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p data-it="Dipende dal tipo di collaborazione. Per i software puoi acquistare direttamente online. Per consulenza iniziamo con una call gratuita di 30 minuti. Per le partnership operative valutiamo insieme il tuo profilo e obiettivi."
+             data-en="It depends on the type of collaboration. For software you can purchase directly online. For consulting we start with a free 30-minute call. For operational partnerships we evaluate your profile and goals together.">Dipende dal tipo di collaborazione. Per i software puoi acquistare direttamente online. Per consulenza iniziamo con una call gratuita di 30 minuti. Per le partnership operative valutiamo insieme il tuo profilo e obiettivi.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="Posso acquistare solo il software senza consulenza?"
+                data-en="Can I buy just the software without consulting?">Posso acquistare solo il software senza consulenza?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p data-it="Sì, tutti i nostri software sono acquistabili in autonomia. Includono documentazione completa e supporto via chat. La consulenza è opzionale ma consigliata per chi è alle prime armi con il verticale."
+             data-en="Yes, all our software can be purchased independently. They include complete documentation and chat support. Consulting is optional but recommended for those new to the vertical.">Sì, tutti i nostri software sono acquistabili in autonomia. Includono documentazione completa e supporto via chat. La consulenza è opzionale ma consigliata per chi è alle prime armi con il verticale.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="I software sono adatti anche ai principianti?"
+                data-en="Are the software tools suitable for beginners?">I software sono adatti anche ai principianti?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p data-it="POWERECOM e POWERLEADS hanno un'interfaccia intuitiva pensata per chi inizia. POWERHEDGING richiede una comprensione base delle prop firm — per questo offriamo un percorso di formazione dedicato."
+             data-en="POWERECOM and POWERLEADS have an intuitive interface designed for beginners. POWERHEDGING requires a basic understanding of prop firms — which is why we offer a dedicated training path.">POWERECOM e POWERLEADS hanno un'interfaccia intuitiva pensata per chi inizia. POWERHEDGING richiede una comprensione base delle prop firm — per questo offriamo un percorso di formazione dedicato.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="Come prenoto una call con il team?"
+                data-en="How do I book a call with the team?">Come prenoto una call con il team?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p data-it="Usa il link Calendly nella sezione contatti, oppure scrivici direttamente su WhatsApp."
+             data-en="Use the Calendly link in the contact section, or message us directly on WhatsApp.">
+            Usa il link Calendly nella sezione contatti, oppure scrivici direttamente su WhatsApp.
+          </p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="I software funzionano su qualsiasi dispositivo?" data-en="Do the software tools work on any device?">I software funzionano su qualsiasi dispositivo?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p data-it="Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale."
+             data-en="Yes, all our platforms are accessible via browser on desktop and mobile. No local installation required.">Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATTI -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner will-animate">
+      <h2 data-it="Pronti a iniziare?" data-en="Ready to start?">Pronti a iniziare?</h2>
+      <p data-it="Scegli come preferisci contattarci." data-en="Choose how you prefer to reach us.">
+        Scegli come preferisci contattarci.
+      </p>
+    </div>
+    <div class="contact-grid will-animate">
+      <div class="contact-card">
+        <div class="contact-card-icon">💬</div>
+        <h3 data-it="WhatsApp" data-en="WhatsApp">WhatsApp</h3>
+        <p data-it="Scrivici direttamente per una risposta rapida."
+           data-en="Message us directly for a quick response.">Scrivici direttamente per una risposta rapida.</p>
+        <a href="https://wa.me/[NUMERO]" target="_blank" class="contact-btn"
+           style="background:#10b981;color:#000"
+           data-it="Scrivici ora" data-en="Message us now">Scrivici ora</a>
+      </div>
+      <div class="contact-card" style="border-top:2px solid var(--white);position:relative">
+        <div class="contact-badge" data-it="Consigliato" data-en="Recommended">Consigliato</div>
+        <div class="contact-card-icon">📅</div>
+        <h3 data-it="Prenota una Call" data-en="Book a Call">Prenota una Call</h3>
+        <p data-it="Scegli giorno e orario per una call con il team."
+           data-en="Choose day and time for a call with the team.">Scegli giorno e orario per una call con il team.</p>
+        <a href="[URL_CALENDLY]" target="_blank" class="contact-btn"
+           style="background:var(--white);color:#000"
+           data-it="Prenota ora" data-en="Book now">Prenota ora</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-icon">✉️</div>
+        <h3 data-it="Email" data-en="Email">Email</h3>
+        <p data-it="Scrivici via email per richieste dettagliate."
+           data-en="Email us for detailed enquiries.">Scrivici via email per richieste dettagliate.</p>
+        <a href="mailto:[EMAIL]" class="contact-btn"
+           style="background:rgba(255,255,255,0.08);color:#fff;text-decoration:none"
+           data-it="Scrivici via email" data-en="Send an email">Scrivici via email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="nav-wordmark"><span class="nav-wordmark-power">POWER</span><span class="nav-wordmark-agency">AGENCY</span></span>
+        <p data-it="Costruiamo software, strategie e automazioni per far crescere il tuo business."
+           data-en="We build software, strategies and automations to grow your business.">
+          Costruiamo software, strategie e automazioni per far crescere il tuo business.
+        </p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/poweragencyai/" target="_blank" aria-label="Instagram">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" target="_blank" aria-label="LinkedIn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="#" target="_blank" aria-label="TikTok">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title" data-it="Business" data-en="Business">Business</div>
+        <a href="#business" data-it="E-Commerce" data-en="E-Commerce">E-Commerce</a>
+        <a href="#business" data-it="Prop Firm" data-en="Prop Firm">Prop Firm</a>
+        <a href="#business" data-it="AI" data-en="AI">AI</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title" data-it="Risorse" data-en="Resources">Risorse</div>
+        <a href="#software" data-it="Software" data-en="Software">Software</a>
+        <a href="#faq" data-it="FAQ" data-en="FAQ">FAQ</a>
+        <a href="#proof" data-it="Risultati" data-en="Results">Risultati</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title" data-it="Contatti" data-en="Contact">Contatti</div>
+        <a href="#contact" data-it="Prenota una Call" data-en="Book a Call">Prenota una Call</a>
+        <a href="https://wa.me/[NUMERO]" target="_blank">WhatsApp</a>
+        <a href="mailto:[EMAIL]" data-it="Scrivici" data-en="Email us">Scrivici</a>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Power Agency. <span data-it="Tutti i diritti riservati." data-en="All rights reserved.">Tutti i diritti riservati.</span></span>
+      <div class="footer-bottom-links">
+        <a href="#" data-it="Privacy Policy" data-en="Privacy Policy">Privacy Policy</a>
+        <a href="#" data-it="Termini e Condizioni" data-en="Terms & Conditions">Termini e Condizioni</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===================== LOADER INTRO =====================
+(function () {
+  if (typeof THREE === 'undefined') return;
+  document.documentElement.classList.add('is-loading');
+  document.body.classList.add('is-loading');
+  window.scrollTo(0, 0);
+
+  const loaderEl  = document.getElementById('loader');
+  const flashEl   = document.getElementById('loader-flash');
+  const canvas    = document.getElementById('loader-canvas');
+  let W = window.innerWidth, H = window.innerHeight;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 1);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 300);
+  camera.position.set(0, 0, 9);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0x060814, 4));
+  const sun = new THREE.DirectionalLight(0xfff5e0, 4.5);
+  sun.position.set(6, 5, 4); scene.add(sun);
+  const rim = new THREE.DirectionalLight(0x4060ff, 0.9);
+  rim.position.set(-5, -3, -4); scene.add(rim);
+
+  // Procedural rocky texture
+  function makeLoaderTex(size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#16120e'; ctx.fillRect(0, 0, size, size);
+    for (let i = 0; i < 200; i++) {
+      const x = Math.random()*size, y = Math.random()*size, r = Math.random()*50+8;
+      const l = Math.floor(Math.random()*28+12);
+      const g = ctx.createRadialGradient(x,y,0,x,y,r);
+      g.addColorStop(0, `rgba(${l+18},${l+13},${l+8},0.55)`);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+    for (let i = 0; i < 80; i++) {
+      const x = Math.random()*size, y = Math.random()*size, r = Math.random()*18+4;
+      ctx.fillStyle = `rgba(4,3,2,${0.25+Math.random()*0.45})`;
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+    for (let i = 0; i < 22; i++) {
+      const x = Math.random()*size, y = Math.random()*size, r = Math.random()*18+5;
+      const rim = ctx.createRadialGradient(x,y,r*0.6,x,y,r*1.3);
+      rim.addColorStop(0,'rgba(0,0,0,0)'); rim.addColorStop(0.6,'rgba(55,48,38,0.35)'); rim.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=rim; ctx.beginPath(); ctx.arc(x,y,r*1.3,0,Math.PI*2); ctx.fill();
+      const pit = ctx.createRadialGradient(x-r*0.2,y-r*0.2,0,x,y,r);
+      pit.addColorStop(0,'rgba(2,2,2,0.95)'); pit.addColorStop(0.65,'rgba(5,4,3,0.7)'); pit.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=pit; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+    const img = ctx.getImageData(0,0,size,size);
+    for (let i = 0; i < img.data.length; i+=4) {
+      const g = (Math.random()-0.5)*18;
+      img.data[i]  =Math.max(0,Math.min(255,img.data[i]+g));
+      img.data[i+1]=Math.max(0,Math.min(255,img.data[i+1]+g*0.9));
+      img.data[i+2]=Math.max(0,Math.min(255,img.data[i+2]+g*0.75));
+    }
+    ctx.putImageData(img,0,0);
+    return new THREE.CanvasTexture(c);
+  }
+
+  // Asteroid
+  const astGeo = new THREE.IcosahedronGeometry(1.6, 5);
+  const astPos = astGeo.attributes.position;
+  for (let i = 0; i < astPos.count; i++) {
+    const x=astPos.getX(i), y=astPos.getY(i), z=astPos.getZ(i);
+    const len=Math.sqrt(x*x+y*y+z*z);
+    const nx=x/len, ny=y/len, nz=z/len;
+    const n1=Math.sin(nx*3.8+1.3)*Math.cos(ny*4.2+0.9)*Math.sin(nz*3.5+2.2);
+    const n2=Math.sin(nx*8.5+2.1)*Math.cos(ny*7.9+1.7)*Math.sin(nz*9.3+0.5);
+    const n3=Math.sin(nx*18+3.4)*Math.cos(ny*16+2.9)*Math.sin(nz*21+1.1);
+    const r=1.6+n1*0.30+n2*0.10+n3*0.035;
+    astPos.setXYZ(i,nx*r,ny*r,nz*r);
+  }
+  astGeo.computeVertexNormals();
+  const astMat = new THREE.MeshStandardMaterial({ map: makeLoaderTex(512), roughness: 0.97, metalness: 0.04 });
+  const asteroid = new THREE.Mesh(astGeo, astMat);
+  scene.add(asteroid);
+
+  // Atmosphere glow
+  const atmMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(1.95, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0x8866aa, transparent: true, opacity: 0.08, side: THREE.BackSide })
+  );
+  scene.add(atmMesh);
+
+  // Stars streaming past
+  const starGeo = new THREE.BufferGeometry();
+  const STARS = 1800;
+  const sPos = new Float32Array(STARS * 3);
+  const sCol = new Float32Array(STARS * 3);
+  for (let i = 0; i < STARS; i++) {
+    sPos[i*3]   = (Math.random()-0.5)*120;
+    sPos[i*3+1] = (Math.random()-0.5)*120;
+    sPos[i*3+2] = Math.random()*(-160) - 10;
+    const t = Math.random();
+    sCol[i*3]=1.00; sCol[i*3+1]=1.00; sCol[i*3+2]=1.00; // pure white
+  }
+  starGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+  starGeo.setAttribute('color',    new THREE.BufferAttribute(sCol, 3));
+  const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.12, transparent: true, opacity: 0.7, sizeAttenuation: true, vertexColors: true }));
+  scene.add(stars);
+
+  // Explosion debris — burst radially from center toward camera
+  // Explosion debris — uniform sphere directions, large particles
+  const EXP_N = 1600;
+  const expDirs   = new Float32Array(EXP_N * 3);
+  const expSpeeds = new Float32Array(EXP_N);
+  const expColArr = new Float32Array(EXP_N * 3);
+  for (let i = 0; i < EXP_N; i++) {
+    // Uniform sphere
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    expDirs[i*3]   = Math.sin(ph) * Math.cos(th);
+    expDirs[i*3+1] = Math.sin(ph) * Math.sin(th);
+    expDirs[i*3+2] = Math.cos(ph);
+    expSpeeds[i]   = 2.0 + Math.random() * 6.0;
+    // White stars — slight warm/cool variation like real stars
+    const t = Math.random();
+    if (t < 0.25)      { expColArr[i*3]=0.90; expColArr[i*3+1]=0.95; expColArr[i*3+2]=1.00; } // subtle blue-white
+    else               { expColArr[i*3]=1.00; expColArr[i*3+1]=1.00; expColArr[i*3+2]=1.00; } // pure white
+  }
+  const expGeoL = new THREE.BufferGeometry();
+  // Allocate positions — will be set relative to frozen camera
+  const expCurPos = new Float32Array(EXP_N * 3);
+  expGeoL.setAttribute('position', new THREE.BufferAttribute(expCurPos, 3));
+  expGeoL.setAttribute('color',    new THREE.BufferAttribute(expColArr, 3));
+  const expMatL = new THREE.PointsMaterial({
+    size: 0.09, transparent: true, opacity: 0,
+    sizeAttenuation: true, vertexColors: true
+  });
+  const expMeshL = new THREE.Points(expGeoL, expMatL);
+  scene.add(expMeshL);
+
+  // Impact light — orange burst
+  const boomLight = new THREE.PointLight(0xff7700, 0, 40);
+  scene.add(boomLight);
+
+  const DURATION = 3200;
+  let startTime = null;
+  let rafId;
+  let exploded = false;
+  let frozenCamZ = null;
+
+  function loaderFrame(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = ts - startTime;
+    const p = Math.min(elapsed / DURATION, 1);
+    const eased = Math.pow(p, 2.2);
+
+    // --- APPROACH (0 → 0.78) ---
+    if (!exploded) {
+      asteroid.rotation.x += 0.008 + p * 0.018;
+      asteroid.rotation.y += 0.012 + p * 0.025;
+      camera.position.z = 9 - eased * 17;
+
+      const starArr = starGeo.attributes.position.array;
+      const spd = 0.05 + eased * 1.8;
+      for (let i = 0; i < STARS; i++) {
+        starArr[i*3+2] += spd;
+        if (starArr[i*3+2] > 12) starArr[i*3+2] = -160;
+      }
+      starGeo.attributes.position.needsUpdate = true;
+
+      const scaleP = Math.max((p - 0.70) / 0.18, 0);
+      const sc = 1 + Math.pow(scaleP, 1.6) * 8;
+      asteroid.scale.setScalar(sc);
+      atmMesh.scale.setScalar(sc);
+    }
+
+    // --- TRIGGER EXPLOSION at p=0.78 ---
+    if (p >= 0.78 && !exploded) {
+      exploded = true;
+      frozenCamZ = camera.position.z;         // lock camera here
+      asteroid.visible = false;
+      atmMesh.visible  = false;
+      // Position explosion center where asteroid was, just in front of camera
+      expMeshL.position.set(0, 0, frozenCamZ - 1.5);
+      boomLight.position.set(0, 0, frozenCamZ - 1.5);
+    }
+
+    // --- EXPLOSION (p=0.78 → 1.0) ---
+    if (exploded) {
+      camera.position.z = frozenCamZ; // freeze camera
+      const ep = Math.min((p - 0.78) / 0.22, 1);
+      const easeExp = 1 - Math.pow(1 - ep, 2.2);
+
+      const pos = expGeoL.attributes.position.array;
+      for (let i = 0; i < EXP_N; i++) {
+        const d = easeExp * expSpeeds[i];
+        pos[i*3]   = expDirs[i*3]   * d;
+        pos[i*3+1] = expDirs[i*3+1] * d;
+        pos[i*3+2] = expDirs[i*3+2] * d;
+      }
+      expGeoL.attributes.position.needsUpdate = true;
+
+      // Opacity: snap in → hold → fade
+      expMatL.opacity = ep < 0.12
+        ? ep / 0.12
+        : ep < 0.55
+          ? 1
+          : Math.max(1 - (ep - 0.55) / 0.35, 0);
+
+      // Orange light spike
+      boomLight.intensity = ep < 0.12
+        ? (ep / 0.12) * 30
+        : Math.max(30 - (ep - 0.12) / 0.30 * 30, 0);
+
+      // Black veil from ep=0.65
+      if (ep > 0.65) {
+        const bp = Math.min((ep - 0.65) / 0.35, 1);
+        flashEl.style.background = '#000';
+        flashEl.style.opacity = bp;
+      }
+    }
+
+    renderer.render(scene, camera);
+
+    if (p < 1) {
+      rafId = requestAnimationFrame(loaderFrame);
+    } else {
+      // Black screen held, then fade out loader → reveal site
+      setTimeout(() => {
+        loaderEl.style.transition = 'opacity 0.55s ease';
+        loaderEl.style.opacity = '0';
+        document.documentElement.classList.remove('is-loading');
+        document.body.classList.remove('is-loading');
+        window.scrollTo(0, 0);
+        setTimeout(() => {
+          loaderEl.remove();
+          renderer.dispose();
+        }, 580);
+      }, 350);
+    }
+  }
+
+  rafId = requestAnimationFrame(loaderFrame);
+
+  window.addEventListener('resize', () => {
+    W = window.innerWidth; H = window.innerHeight;
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+    renderer.setSize(W, H);
+  }, { passive: true });
+})();
+
+// ===================== THREE.JS 3D SCENE =====================
+(function () {
+  if (typeof THREE === 'undefined') return;
+
+  const canvas = document.getElementById('bg-canvas');
+  let W = window.innerWidth, H = window.innerHeight;
+
+  function clamp(v, mn, mx) { return Math.max(mn, Math.min(mx, v)); }
+
+  // --- Renderer ---
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  // --- Scene & Camera ---
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 300);
+  camera.position.set(0, 1, 7);
+
+  // --- Lighting ---
+  scene.add(new THREE.AmbientLight(0x060814, 4));
+  const sunLight = new THREE.DirectionalLight(0xfff5e0, 3.5);
+  sunLight.position.set(8, 6, 4);
+  sunLight.castShadow = true;
+  scene.add(sunLight);
+  const rimLight = new THREE.DirectionalLight(0x4060ff, 0.6);
+  rimLight.position.set(-6, -3, -5);
+  scene.add(rimLight);
+  // Portal flash — brand orange
+  const impactLight = new THREE.PointLight(0xC85A14, 0, 30);
+  impactLight.position.set(0, -5.5, 0);
+  scene.add(impactLight);
+
+  // --- Procedural rocky texture via canvas ---
+  function makeRockyTexture(size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    // Base coat — very dark warm brown
+    ctx.fillStyle = '#16120e';
+    ctx.fillRect(0, 0, size, size);
+    // Large surface variation patches
+    for (let i = 0; i < 220; i++) {
+      const x = Math.random() * size, y = Math.random() * size;
+      const r = Math.random() * 55 + 10;
+      const l = Math.floor(Math.random() * 28 + 12);
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, `rgba(${l+18},${l+13},${l+8},0.55)`);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+    }
+    // Mid-size dark patches (shadows in valleys)
+    for (let i = 0; i < 90; i++) {
+      const x = Math.random() * size, y = Math.random() * size;
+      const r = Math.random() * 22 + 4;
+      ctx.fillStyle = `rgba(4,3,2,${0.25 + Math.random() * 0.45})`;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+    }
+    // Craters (dark pit with bright rim)
+    for (let i = 0; i < 28; i++) {
+      const x = Math.random() * size, y = Math.random() * size;
+      const r = Math.random() * 20 + 5;
+      // Outer bright rim
+      const rim = ctx.createRadialGradient(x, y, r*0.6, x, y, r*1.3);
+      rim.addColorStop(0, 'rgba(0,0,0,0)');
+      rim.addColorStop(0.6, `rgba(55,48,38,0.35)`);
+      rim.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = rim; ctx.beginPath(); ctx.arc(x, y, r*1.3, 0, Math.PI*2); ctx.fill();
+      // Inner pit
+      const pit = ctx.createRadialGradient(x - r*0.2, y - r*0.2, 0, x, y, r);
+      pit.addColorStop(0, 'rgba(2,2,2,0.95)');
+      pit.addColorStop(0.65, 'rgba(5,4,3,0.7)');
+      pit.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = pit; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+    }
+    // Fine pixel grain for micro-texture
+    const img = ctx.getImageData(0, 0, size, size);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const g = (Math.random() - 0.5) * 18;
+      img.data[i]   = Math.max(0, Math.min(255, img.data[i]   + g));
+      img.data[i+1] = Math.max(0, Math.min(255, img.data[i+1] + g * 0.9));
+      img.data[i+2] = Math.max(0, Math.min(255, img.data[i+2] + g * 0.75));
+    }
+    ctx.putImageData(img, 0, 0);
+    return new THREE.CanvasTexture(c);
+  }
+
+  // --- Stars — three layers with size/color variation ---
+  function makeStarLayer(count, size, opacity, spread) {
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    const col = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos[i*3]   = (Math.random()-0.5) * spread;
+      pos[i*3+1] = (Math.random()-0.5) * spread;
+      pos[i*3+2] = (Math.random()-0.5) * spread;
+      col[i*3]=1.00; col[i*3+1]=1.00; col[i*3+2]=1.00; // pure white
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
+    const mat = new THREE.PointsMaterial({ size, transparent: true, opacity, sizeAttenuation: true, vertexColors: true, depthWrite: false });
+    return new THREE.Points(geo, mat);
+  }
+  const starLayers = [
+    makeStarLayer(1600, 0.055, 0.55, 190),
+    makeStarLayer(350,  0.12,  0.80, 165),
+    makeStarLayer(55,   0.22,  0.95, 140),
+  ];
+  starLayers.forEach(s => scene.add(s));
+
+  // --- Nebula clouds (deep background) ---
+  function makeNebula(x, y, z, color, count, spread, opacity) {
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const r  = Math.pow(Math.random(), 0.45) * spread;
+      const th = Math.random() * Math.PI * 2;
+      const ph = Math.acos(2 * Math.random() - 1);
+      pos[i*3]   = x + r * Math.sin(ph) * Math.cos(th);
+      pos[i*3+1] = y + r * Math.sin(ph) * Math.sin(th) * 0.45;
+      pos[i*3+2] = z + r * Math.cos(ph);
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({ color, size: 0.65, transparent: true, opacity, sizeAttenuation: true, depthWrite: false });
+    return new THREE.Points(geo, mat);
+  }
+  scene.add(
+    makeNebula(-28,  10, -48, 0x3a0068, 450, 30, 0.13),
+    makeNebula( 32,  -6, -42, 0x001a55, 300, 24, 0.10),
+    makeNebula(  3,  18, -58, 0x180038, 220, 20, 0.08),
+    makeNebula(-12, -22, -38, 0x3d0018, 160, 16, 0.07),
+  );
+
+  // --- Asteroid ---
+  const rockyTex = makeRockyTexture(512);
+  // High poly count for smooth silhouette
+  const astGeo = new THREE.IcosahedronGeometry(1.6, 5);
+  const astPos = astGeo.attributes.position;
+  // Multi-octave displacement: large features + medium + fine
+  for (let i = 0; i < astPos.count; i++) {
+    const x = astPos.getX(i), y = astPos.getY(i), z = astPos.getZ(i);
+    const len = Math.sqrt(x*x+y*y+z*z);
+    const nx = x/len, ny = y/len, nz = z/len;
+    const n1 = Math.sin(nx*3.8+1.3) * Math.cos(ny*4.2+0.9) * Math.sin(nz*3.5+2.2);
+    const n2 = Math.sin(nx*8.5+2.1) * Math.cos(ny*7.9+1.7) * Math.sin(nz*9.3+0.5);
+    const n3 = Math.sin(nx*18+3.4)  * Math.cos(ny*16+2.9)  * Math.sin(nz*21+1.1);
+    const disp = n1*0.30 + n2*0.10 + n3*0.035;
+    const r = 1.6 + disp;
+    astPos.setXYZ(i, nx*r, ny*r, nz*r);
+  }
+  astGeo.computeVertexNormals();
+
+  const astMat = new THREE.MeshStandardMaterial({
+    map: rockyTex,
+    roughness: 0.97,
+    metalness: 0.04,
+    transparent: true,
+    opacity: 1,
+  });
+  const astMesh = new THREE.Mesh(astGeo, astMat);
+  astMesh.castShadow = true;
+  astMesh.receiveShadow = true;
+
+  // Subtle atmosphere backglow (slightly oversized, back-face only)
+  const atmGeo = new THREE.SphereGeometry(1.95, 32, 32);
+  const atmMat = new THREE.MeshBasicMaterial({ color: 0x8866aa, transparent: true, opacity: 0.07, side: THREE.BackSide });
+  const atm = new THREE.Mesh(atmGeo, atmMat);
+
+  const asteroidGroup = new THREE.Group();
+  asteroidGroup.add(astMesh, atm);
+  asteroidGroup.position.set(0.3, 0.5, 0);
+  scene.add(asteroidGroup);
+
+  // --- Procedural planet textures ---
+  function makePlanetTexture(type, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+
+    if (type === 'terrestrial') {
+      // Ocean base
+      ctx.fillStyle = '#04111f';
+      ctx.fillRect(0, 0, size, size);
+      // Ocean depth shimmer
+      for (let i = 0; i < 70; i++) {
+        const x = Math.random()*size, y = Math.random()*size, r = Math.random()*70+15;
+        const g = ctx.createRadialGradient(x,y,0,x,y,r);
+        g.addColorStop(0, 'rgba(0,50,100,0.35)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      }
+      // Land masses (irregular blobs)
+      for (let m = 0; m < 7; m++) {
+        const cx = Math.random()*size, cy = Math.random()*size;
+        ctx.beginPath();
+        const pts = 14;
+        for (let j = 0; j <= pts; j++) {
+          const a = (j/pts)*Math.PI*2;
+          const r = (50+Math.random()*90)*(0.55+Math.random()*0.45);
+          const px = cx + Math.cos(a)*r*(0.5+Math.random()*0.5);
+          const py = cy + Math.sin(a)*r*(0.4+Math.random()*0.6);
+          j===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+        }
+        ctx.closePath();
+        const lv = 20+Math.floor(Math.random()*22);
+        ctx.fillStyle = `rgb(${lv+8},${lv+18},${lv+2})`; ctx.fill();
+      }
+      // Mountain highlight pass
+      for (let i = 0; i < 40; i++) {
+        const x = Math.random()*size, y = Math.random()*size, r = Math.random()*18+3;
+        ctx.fillStyle = `rgba(60,75,45,${0.12+Math.random()*0.18})`;
+        ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      }
+      // Ice caps
+      const top = ctx.createRadialGradient(size/2,0,0,size/2,0,size*0.20);
+      top.addColorStop(0,'rgba(210,235,255,0.75)'); top.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = top; ctx.fillRect(0,0,size,size);
+      const bot = ctx.createRadialGradient(size/2,size,0,size/2,size,size*0.15);
+      bot.addColorStop(0,'rgba(210,235,255,0.55)'); bot.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle = bot; ctx.fillRect(0,0,size,size);
+
+    } else if (type === 'gas') {
+      // Gas giant — purple-violet horizontal bands
+      ctx.fillStyle = '#120520';
+      ctx.fillRect(0, 0, size, size);
+      const bands = [
+        [0.00,0.10,'rgba(70,15,110,0.9)'],[0.10,0.08,'rgba(110,55,165,0.7)'],
+        [0.18,0.14,'rgba(55,8,95,0.95)' ],[0.32,0.09,'rgba(130,75,190,0.65)'],
+        [0.41,0.17,'rgba(45,4,82,0.98)' ],[0.58,0.09,'rgba(95,35,150,0.7)'],
+        [0.67,0.13,'rgba(65,12,105,0.9)' ],[0.80,0.20,'rgba(85,25,130,0.8)'],
+      ];
+      bands.forEach(([y, h, col]) => { ctx.fillStyle=col; ctx.fillRect(0,y*size,size,h*size); });
+      // Turbulence / wave distortion on bands
+      for (let i = 0; i < 130; i++) {
+        const x = Math.random()*size, y = Math.random()*size, rw = Math.random()*35+8, rh = rw*0.28;
+        ctx.fillStyle = Math.random()>0.5 ? 'rgba(155,95,215,0.12)' : 'rgba(25,0,50,0.18)';
+        ctx.beginPath(); ctx.ellipse(x,y,rw,rh,0,0,Math.PI*2); ctx.fill();
+      }
+      // Great storm
+      const sx=size*0.62, sy=size*0.44;
+      const storm = ctx.createRadialGradient(sx,sy,0,sx,sy,size*0.09);
+      storm.addColorStop(0,'rgba(195,145,255,0.60)');
+      storm.addColorStop(0.5,'rgba(115,55,175,0.30)');
+      storm.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=storm; ctx.beginPath(); ctx.ellipse(sx,sy,size*0.10,size*0.055,0,0,Math.PI*2); ctx.fill();
+
+    } else { // ice / AI
+      ctx.fillStyle = '#010812';
+      ctx.fillRect(0, 0, size, size);
+      // Deep ice patches
+      for (let i = 0; i < 180; i++) {
+        const x = Math.random()*size, y = Math.random()*size, r = Math.random()*45+8;
+        const g = ctx.createRadialGradient(x,y,0,x,y,r);
+        const l = 12+Math.floor(Math.random()*38);
+        g.addColorStop(0,`rgba(${l},${l*2},${Math.min(l*4,255)},0.45)`); g.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      }
+      // Ice crack network
+      ctx.strokeStyle='rgba(60,140,255,0.13)'; ctx.lineWidth=1;
+      for (let i = 0; i < 50; i++) {
+        let px=Math.random()*size, py=Math.random()*size;
+        ctx.beginPath(); ctx.moveTo(px,py);
+        for (let j=0;j<7;j++){px+=(Math.random()-0.5)*55;py+=(Math.random()-0.5)*55;ctx.lineTo(px,py);}
+        ctx.stroke();
+      }
+      // Polar energy glow
+      const pol=ctx.createRadialGradient(size/2,size*0.28,0,size/2,size*0.28,size*0.32);
+      pol.addColorStop(0,'rgba(0,140,255,0.45)'); pol.addColorStop(0.5,'rgba(0,70,200,0.20)'); pol.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=pol; ctx.fillRect(0,0,size,size);
+    }
+
+    // Fine grain
+    const img = ctx.getImageData(0, 0, size, size);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const g = (Math.random()-0.5)*14;
+      img.data[i]   = clamp(img.data[i]+g,   0, 255);
+      img.data[i+1] = clamp(img.data[i+1]+g, 0, 255);
+      img.data[i+2] = clamp(img.data[i+2]+g, 0, 255);
+    }
+    ctx.putImageData(img, 0, 0);
+    return new THREE.CanvasTexture(c);
+  }
+
+  // --- Portal Ring — electric cyan-blue ---
+  const mkRing = (r, tube, op, col) => {
+    const m = new THREE.Mesh(
+      new THREE.TorusGeometry(r, tube, 16, 140),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: op, depthWrite: false })
+    );
+    m.rotation.x = Math.PI / 2;
+    m.position.set(0, -5.5, 0);
+    scene.add(m);
+    return m;
+  };
+  const ring1 = mkRing(2.4, 0.012, 0, 0xFF7733); // sharp edge — bright orange
+  const ring2 = mkRing(2.4, 0.045, 0, 0xC85A14); // mid glow — brand orange
+  const ring3 = mkRing(2.4, 0.11,  0, 0x3D1200); // faint outer glow
+
+  // --- Portal vortex — spinning disc of particles inside ring ---
+  const VORTEX_N = 320;
+  const vortexAngles = new Float32Array(VORTEX_N);
+  const vortexRadii  = new Float32Array(VORTEX_N);
+  const vortexZOff   = new Float32Array(VORTEX_N);
+  const vortexPos    = new Float32Array(VORTEX_N * 3);
+  for (let i = 0; i < VORTEX_N; i++) {
+    vortexAngles[i] = Math.random() * Math.PI * 2;
+    vortexRadii[i]  = Math.sqrt(Math.random()) * 2.15; // uniform disc
+    vortexZOff[i]   = (Math.random()-0.5) * 0.12;
+  }
+  const vortexGeo = new THREE.BufferGeometry();
+  vortexGeo.setAttribute('position', new THREE.BufferAttribute(vortexPos, 3));
+  const vortexMat = new THREE.PointsMaterial({ color: 0xFF8844, size: 0.045, transparent: true, opacity: 0, sizeAttenuation: true, depthWrite: false });
+  const vortexMesh = new THREE.Points(vortexGeo, vortexMat);
+  vortexMesh.rotation.x = Math.PI / 2;
+  vortexMesh.position.set(0, -5.5, 0);
+  vortexMesh.renderOrder = 1;
+  scene.add(vortexMesh);
+  let vortexTime = 0;
+
+  // --- Explosion debris — blue-white plasma + silver dust ---
+  const EXP_COUNT = 1000;
+  const expBase    = new Float32Array(EXP_COUNT * 3);
+  const expTarget  = new Float32Array(EXP_COUNT * 3);
+  const expCurrent = new Float32Array(EXP_COUNT * 3);
+  for (let i = 0; i < EXP_COUNT; i++) {
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    const r  = 1.5 + Math.random() * 0.5;
+    expBase[i*3]   = r * Math.sin(ph) * Math.cos(th);
+    expBase[i*3+1] = r * Math.sin(ph) * Math.sin(th);
+    expBase[i*3+2] = r * Math.cos(ph);
+    const s = 3.5 + Math.random() * 6;
+    expTarget[i*3]   = (Math.random()-0.5) * s * 2;
+    expTarget[i*3+1] = (Math.random()-0.5) * s * 2 - 0.5;
+    expTarget[i*3+2] = (Math.random()-0.5) * s * 2;
+  }
+  expCurrent.set(expBase);
+  const expGeo = new THREE.BufferGeometry();
+  expGeo.setAttribute('position', new THREE.BufferAttribute(expCurrent, 3));
+  // Same color as ring — MeshBasicMaterial-style sRGB color, no vertexColors
+  const expMat = new THREE.PointsMaterial({ color: 0xC85A14, size: 0.065, transparent: true, opacity: 0, sizeAttenuation: true, depthWrite: false });
+  const expPoints = new THREE.Points(expGeo, expMat);
+  expPoints.position.set(0, -5.5, 0);
+  expPoints.renderOrder = 1;
+  scene.add(expPoints);
+
+  // --- Three realistic planets ---
+  const PLANET_DATA = [
+    { type: 'terrestrial', atm: 0x00aa44, haloCol: 0x003322 }, // E-Commerce
+    { type: 'gas',         atm: 0x8800cc, haloCol: 0x220033 }, // Prop Firm
+    { type: 'ice',         atm: 0x00d4ff, haloCol: 0x001a22 }, // AI
+  ];
+  const planets = PLANET_DATA.map(({ type, atm, haloCol }, i) => {
+    const group = new THREE.Group();
+    const tex = makePlanetTexture(type, 512);
+    const planetMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.58, 52, 52),
+      new THREE.MeshStandardMaterial({ map: tex, roughness: 0.75, metalness: 0.0, transparent: true, opacity: 0 })
+    );
+    const atmosphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.72, 32, 32),
+      new THREE.MeshBasicMaterial({ color: atm, transparent: true, opacity: 0, side: THREE.BackSide })
+    );
+    const halo = new THREE.Mesh(
+      new THREE.SphereGeometry(1.05, 16, 16),
+      new THREE.MeshBasicMaterial({ color: haloCol, transparent: true, opacity: 0, side: THREE.BackSide })
+    );
+    group.add(planetMesh, atmosphere, halo);
+    const angle = (i / 3) * Math.PI * 2;
+    group.userData = { angle, pMat: planetMesh.material, aMat: atmosphere.material, hMat: halo.material, mesh: planetMesh };
+    group.position.set(Math.cos(angle)*2.2, -5.5, Math.sin(angle)*2.2);
+    group.renderOrder = 2;
+    scene.add(group);
+    return group;
+  });
+
+  // --- Scroll animation state ---
+  let autoRotX = 0, autoRotY = 0, idleTime = 0;
+  let scrollProg = 0, easedProg = 0;
+
+  function updateScene(p) {
+    // Phase timings
+    const p2  = clamp((p - 0.28) / 0.24, 0, 1); // dive toward portal
+    const p3a = clamp((p - 0.52) / 0.08, 0, 1); // asteroid squishes into portal
+    const p3b = clamp((p - 0.54) / 0.10, 0, 1); // portal blazes + vortex spins
+    const p4  = clamp((p - 0.64) / 0.12, 0, 1); // explosion burst
+    const p5  = clamp((p - 0.70) / 0.14, 0, 1); // planets emerge + 3 fast orbits
+    const p5b = clamp((p - 0.84) / 0.12, 0, 1); // settled drift — riprende arco esistente
+    const p6  = 0; // no fade — planets stay as background for FAQ/Contacts
+
+    // Asteroid: dive + spin ramp-up
+    asteroidGroup.position.y = 0.5 - p2 * 6.0;
+    autoRotX += 0.004 + p2 * 0.055;
+    autoRotY += 0.007 + p2 * 0.075;
+    asteroidGroup.rotation.x = autoRotX;
+    asteroidGroup.rotation.y = autoRotY;
+
+    // Portal entry: squish on X/Z, elongate on Y (stretching toward portal)
+    const sXZ = clamp(1 - p3a * 0.85, 0.001, 1);
+    const sY  = clamp(1 + p3a * 0.5, 1, 1.5);
+    asteroidGroup.scale.set(sXZ, sY, sXZ);
+    astMat.opacity = clamp(1 - p3a * 2.0, 0, 1);
+    atmMat.opacity = clamp(0.07 - p3a * 0.07, 0, 0.07);
+    asteroidGroup.visible = astMat.opacity > 0.01;
+
+    // Ring: appears during dive, blazes during portal entry, fades after explosion
+    const rBase  = clamp(p2 * 2.5, 0, 1);
+    const rBlaze = clamp(p3b * 5, 0, 1) * clamp(1 - p4 * 3, 0, 1);
+    const rFade  = clamp(1 - p4 * 2.5, 0, 1);
+    ring1.material.opacity = (rBase * 0.70 + rBlaze * 0.50) * rFade;
+    ring2.material.opacity = (rBase * 0.18 + rBlaze * 0.55) * rFade;
+    ring3.material.opacity = (rBase * 0.04 + rBlaze * 0.20) * rFade;
+
+    // Portal vortex: spins during traversal, collapses inward
+    vortexTime += 0.05;
+    const vOp = clamp(p3b * 4, 0, 1) * clamp(1 - p4 * 5, 0, 1);
+    vortexMat.opacity = vOp;
+    if (vOp > 0) {
+      const vp = vortexGeo.attributes.position.array;
+      for (let i = 0; i < VORTEX_N; i++) {
+        // Inner particles spin faster; collapse radius as traversal progresses
+        const speed = 1.2 + (1 - vortexRadii[i] / 2.15) * 2.5;
+        const angle = vortexAngles[i] + vortexTime * speed;
+        const r = vortexRadii[i] * clamp(1 - p3b * 0.75, 0.01, 1);
+        vp[i*3]   = Math.cos(angle) * r;
+        vp[i*3+1] = Math.sin(angle) * r;
+        vp[i*3+2] = vortexZOff[i];
+      }
+      vortexGeo.attributes.position.needsUpdate = true;
+    }
+
+    // Portal flash — double spike: entry + explosion
+    impactLight.intensity = p3b * (1-p3b) * 25 + p4 * (1-p4) * 45;
+
+    // Explosion debris
+    const eOp = clamp(p4 * 3.5, 0, 1) * clamp(1 - p6 * 2, 0, 1);
+    expMat.opacity = eOp;
+    if (p4 > 0) {
+      const eased = 1 - Math.pow(1 - p4, 2.5);
+      const pos = expGeo.attributes.position.array;
+      for (let i = 0; i < EXP_COUNT * 3; i++) {
+        pos[i] = expBase[i] + (expTarget[i] - expBase[i]) * eased;
+      }
+      expGeo.attributes.position.needsUpdate = true;
+    }
+
+    // Planets: emerge from explosion, staggered, slow self-rotation
+    planets.forEach((group, i) => {
+      const delay = i * 0.07;
+      const pIn = clamp((p5 - delay) / 0.28, 0, 1);
+      const eased = 1 - Math.pow(1 - pIn, 2);
+      const oOp = eased * clamp(1 - p6 * 2.5, 0, 1);
+      const d = group.userData;
+      d.pMat.opacity = oOp;
+      d.aMat.opacity = oOp * 0.35;
+      d.hMat.opacity = oOp * 0.12;
+      const spinEase = 1 - Math.pow(1 - p5, 3);         // cubic ease-out: veloce → lento
+      const a = d.angle
+              + (3 * Math.PI * 2) * spinEase            // 3 giri orbitali completi veloci
+              + p5b * Math.PI * 0.35;                   // poi deriva ~63° col drift
+      const r = 2.0 + eased * 0.8;
+      // Anchor to camera so planets stay in frame as user scrolls down
+      const camLookY = (1 - p * 7.2) - 1.2;
+      const yRise = camLookY - 0.5 + eased * 1.0;
+      group.position.set(Math.cos(a)*r, yRise, Math.sin(a)*r);
+      // Slow axial rotation
+      if (d.mesh) d.mesh.rotation.y += 0.012;
+    });
+
+    // Stars parallax
+    starLayers.forEach((s, i) => {
+      s.rotation.y = p * (0.3 + i * 0.05);
+      s.rotation.x = p * 0.08;
+    });
+
+    // Camera tracks the action
+    camera.position.y = 1 - p * 7.2;
+    camera.lookAt(0, camera.position.y - 1.2, 0);
+  }
+
+  // --- Scroll remap — ritmo cinematografico (4 zone) ---
+  // Zona 1 (0-40%):   dive         → 1.3x (quasi originale)
+  // Zona 2 (40-46%):  portale      → 3.0x veloce (flash rapido)
+  // Zona 3 (46-88%):  3 orbite     → 0.33x LENTO (pianeti quasi fermi)
+  // Zona 4 (88-100%): drift ~63°   → 1.0x originale
+  function remapScroll(raw) {
+    if (raw < 0.40) return raw * (0.52 / 0.40);
+    if (raw < 0.46) return 0.52 + (raw - 0.40) * 3.0;
+    if (raw < 0.88) return 0.70 + (raw - 0.46) * (0.14 / 0.42);
+    return 0.84 + (raw - 0.88) * 1.0;
+  }
+
+  // --- Render loop ---
+  function animate() {
+    requestAnimationFrame(animate);
+    idleTime += 0.008;
+    const targetProg = remapScroll(scrollProg);
+    easedProg += (targetProg - easedProg) * 0.055;
+
+    if (easedProg < 0.008) {
+      autoRotX += 0.003;
+      autoRotY += 0.005;
+      asteroidGroup.rotation.x = autoRotX;
+      asteroidGroup.rotation.y = autoRotY;
+      asteroidGroup.position.y = 0.5 + Math.sin(idleTime * 0.45) * 0.18;
+      asteroidGroup.position.x = 0.3 + Math.cos(idleTime * 0.3) * 0.06;
+    } else {
+      updateScene(easedProg);
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  window.addEventListener('scroll', () => {
+    const max = document.body.scrollHeight - window.innerHeight;
+    scrollProg = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    W = window.innerWidth; H = window.innerHeight;
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+    renderer.setSize(W, H);
+  });
+
+  animate();
+})();
+
+// ===================== LANGUAGE SWITCHER =====================
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.querySelectorAll('[data-it]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + lang);
+  });
+  document.querySelectorAll('[data-it-placeholder]').forEach(el => {
+    el.placeholder = el.getAttribute('data-' + lang + '-placeholder');
+  });
+  document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+}
+
+// ===================== MOBILE MENU =====================
+function toggleMenu() {
+  const m = document.getElementById('mobile-menu');
+  m.classList.toggle('open');
+}
+
+// ===================== VERTICAL ACCORDION =====================
+function toggleVertical(id) {
+  const block = document.getElementById('vblock-' + id);
+  const isOpen = block.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.vertical-block').forEach(b => b.classList.remove('open'));
+  if (!isOpen) block.classList.add('open');
+}
+
+// ===================== ANGLE TABS =====================
+function switchAngle(vertical, tab) {
+  // Deactivate all tabs in this vertical
+  const vblock = document.getElementById('vblock-' + vertical);
+  vblock.querySelectorAll('.angle-tab').forEach(t => t.classList.remove('active'));
+  vblock.querySelectorAll('.angle-panel').forEach(p => p.classList.remove('active'));
+  // Activate selected
+  const targetPanel = document.getElementById(vertical + '-' + tab);
+  if (targetPanel) targetPanel.classList.add('active');
+  // Find clicked tab by matching onclick
+  vblock.querySelectorAll('.angle-tab').forEach(t => {
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + tab + "'")) {
+      t.classList.add('active');
+    }
+  });
+}
+
+// ===================== FAQ =====================
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-icon').textContent = '+';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    item.querySelector('.faq-icon').textContent = '×';
+  }
+}
+
+// ===================== GSAP ANIMATIONS =====================
+gsap.registerPlugin(ScrollTrigger);
+
+window.addEventListener('load', () => {
+  // Navbar
+  gsap.to('#navbar', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.3 });
+
+  // Hero badge
+  gsap.to('.hero-badge', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0.5 });
+
+  // Hero headline — stagger words
+  gsap.set('.hero-h1', { opacity: 1 });
+  gsap.from('.hero-h1 .word', {
+    y: 80, opacity: 0,
+    stagger: 0.12,
+    duration: 0.9,
+    ease: 'power3.out',
+    delay: 0.7
+  });
+
+  // Hero sub + actions + pills
+  gsap.to('.hero-sub', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 1.3 });
+  gsap.to('.hero-actions', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 1.5 });
+  gsap.to('.hero-pills', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 1.7 });
+
+  // Scroll-triggered fade-ups
+  gsap.utils.toArray('.will-animate').forEach(el => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power2.out'
+    });
+  });
+
+  // Counter animation
+  gsap.utils.toArray('.counter').forEach(el => {
+    const target = parseInt(el.getAttribute('data-target'));
+    gsap.to({ val: 0 }, {
+      val: target,
+      scrollTrigger: { trigger: el, start: 'top 85%' },
+      duration: 1.8,
+      ease: 'power2.out',
+      onUpdate: function() { el.textContent = Math.round(this.targets()[0].val); }
+    });
+  });
+
+  // Navbar hide/show on scroll + glow fade
+  const navEl = document.getElementById('navbar');
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    // Hide/show
+    if (y > lastY && y > 100) {
+      gsap.to('#navbar', { y: -64, duration: 0.3, ease: 'power2.in' });
+    } else {
+      gsap.to('#navbar', { y: 0, duration: 0.3, ease: 'power2.out' });
+    }
+    lastY = y;
+    // Glow: 100% at y=0, fades to 0 by y=220px
+    const glowVal = Math.max(1 - y / 220, 0).toFixed(3);
+    navEl.style.setProperty('--nav-glow', glowVal);
+  });
+});
+</script>
+</body>
+</html>
