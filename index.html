@@ -1105,6 +1105,45 @@
     .social-card { min-width: 140px; padding: 18px 20px; }
   }
 
+  /* ---- COOKIE BANNER ---- */
+  .cookie-banner {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 10000;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 20px 32px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .cookie-banner.show { display: flex; }
+  .cookie-banner p {
+    font-size: 13px;
+    color: #aaa;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .cookie-banner p a { color: var(--orange); text-decoration: underline; }
+  .cookie-accept {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .cookie-accept:hover { opacity: 0.85; }
+
   /* ============================================================
      LOADER
   ============================================================ */
@@ -2148,8 +2187,8 @@
     <div class="footer-bottom">
       <span class="footer-copy">© <script>document.write(new Date().getFullYear())</script> Power Agency. <span data-it="Tutti i diritti riservati." data-en="All rights reserved.">Tutti i diritti riservati.</span></span>
       <div class="footer-bottom-links">
-        <a href="#" data-it="Privacy Policy" data-en="Privacy Policy">Privacy Policy</a>
-        <a href="#" data-it="Termini e Condizioni" data-en="Terms & Conditions">Termini e Condizioni</a>
+        <a href="privacy.html" data-it="Privacy Policy" data-en="Privacy Policy">Privacy Policy</a>
+        <a href="terms.html" data-it="Termini e Condizioni" data-en="Terms & Conditions">Termini e Condizioni</a>
       </div>
     </div>
   </div>
@@ -2954,7 +2993,12 @@
 function setLang(lang) {
   document.documentElement.setAttribute('data-lang', lang);
   document.querySelectorAll('[data-it]').forEach(el => {
-    el.textContent = el.getAttribute('data-' + lang);
+    const val = el.getAttribute('data-' + lang);
+    if (val && val.includes('<')) {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
   });
   document.querySelectorAll('[data-it-placeholder]').forEach(el => {
     el.placeholder = el.getAttribute('data-' + lang + '-placeholder');
@@ -3080,6 +3124,27 @@ window.addEventListener('load', () => {
     navEl.style.setProperty('--nav-glow', glowVal);
   });
 });
+
+// ===================== COOKIE BANNER =====================
+(function() {
+  if (localStorage.getItem('cookie-accepted')) return;
+  const banner = document.getElementById('cookie-banner');
+  if (banner) banner.classList.add('show');
+})();
+function acceptCookies() {
+  localStorage.setItem('cookie-accepted', '1');
+  document.getElementById('cookie-banner').classList.remove('show');
+}
 </script>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" class="cookie-banner">
+  <p data-it="Questo sito utilizza cookie tecnici per migliorare la tua esperienza. Continuando la navigazione accetti l'utilizzo dei cookie. <a href='privacy.html'>Privacy Policy</a>"
+     data-en="This site uses technical cookies to improve your experience. By continuing to browse you accept the use of cookies. <a href='privacy.html'>Privacy Policy</a>">
+    Questo sito utilizza cookie tecnici per migliorare la tua esperienza. Continuando la navigazione accetti l'utilizzo dei cookie. <a href="privacy.html">Privacy Policy</a>
+  </p>
+  <button class="cookie-accept" onclick="acceptCookies()" data-it="Accetta" data-en="Accept">Accetta</button>
+</div>
+
 </body>
 </html>
