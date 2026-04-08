@@ -3,12 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Power Agency</title>
+  <title>Power Agency — E-Commerce, Prop Firm & AI | Software e Consulenza</title>
   <meta name="description" content="Power Agency — E-Commerce, Prop Firm, AI. Software. Formazione. Collaborazione." />
+  <meta name="keywords" content="Power Agency, e-commerce, prop firm, hedging, AI, intelligenza artificiale, software, automazioni, consulenza" />
+  <link rel="canonical" href="https://poweragency.it/" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Power Agency — Software, Formazione e Collaborazione" />
+  <meta property="og:description" content="Un'agenzia tech di tre persone. Tre verticali: E-Commerce, Prop Firm Hedging, AI. Software proprietari, formazione 1:1 e collaborazione diretta." />
+  <meta property="og:url" content="https://poweragency.it/" />
+  <meta property="og:image" content="https://poweragency.it/og-image.png" />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Power Agency — Software, Formazione e Collaborazione" />
+  <meta name="twitter:description" content="Un'agenzia tech di tre persone. Tre verticali: E-Commerce, Prop Firm Hedging, AI." />
+  <meta name="twitter:image" content="https://poweragency.it/og-image.png" />
   <link rel="icon" type="image/png" href="logo_power_agency-removebg-preview.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Power Agency",
+    "url": "https://poweragency.it",
+    "email": "info@poweragency.it",
+    "description": "Agenzia tech specializzata in E-Commerce, Prop Firm Hedging e Intelligenza Artificiale. Software proprietari, formazione e collaborazione diretta.",
+    "sameAs": ["https://www.instagram.com/poweragencyai/"],
+    "foundingDate": "2024",
+    "numberOfEmployees": "3",
+    "knowsAbout": ["E-Commerce", "Prop Firm Hedging", "Artificial Intelligence", "Software Development"]
+  }
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
@@ -33,6 +62,7 @@
     --gray-300: #888888;
     --gray-200: #aaaaaa;
     --gray-100: #dddddd;
+    --gold: #f0b429;
   }
 
   body {
@@ -63,6 +93,12 @@
 
   /* Selection */
   ::selection { background: var(--orange); color: #fff; }
+
+  /* Focus styles for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+  }
 
   /* ---- CANVAS ---- */
   #bg-canvas {
@@ -350,8 +386,7 @@
     display: flex; align-items: center; gap: 12px;
     font-size: 11px;
     font-weight: 700;
-    color: var(--orange) !important;
-    color: var(--gray-400);
+    color: var(--orange);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 24px;
@@ -1112,10 +1147,10 @@
   .business-card,
   .vertical-header,
   .vertical-body {
-    background: rgba(255,255,255,0.03) !important;
+    background: rgba(255,255,255,0.03);
     backdrop-filter: blur(24px) saturate(1.6) brightness(1.08);
     -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(1.08);
-    border: 1px solid rgba(255,255,255,0.09) !important;
+    border: 1px solid rgba(255,255,255,0.09);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.10),
       inset 0 -1px 0 rgba(0,0,0,0.18),
@@ -1164,23 +1199,23 @@
 
   /* Metric cells glass */
   .metric-cell {
-    background: rgba(255,255,255,0.025) !important;
+    background: rgba(255,255,255,0.025);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
 
   /* Navbar already has blur — just strengthen the glass border */
   nav {
-    border-bottom: 1px solid rgba(255,255,255,0.09) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.09);
     box-shadow: 0 1px 40px rgba(0,0,0,0.5);
   }
 
   /* Form wrapper glass */
   .form-wrapper {
-    background: rgba(255,255,255,0.025) !important;
+    background: rgba(255,255,255,0.025);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.08);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 40px rgba(0,0,0,0.5);
   }
 </style>
@@ -1217,7 +1252,7 @@
       </div>
       <a href="#contact" class="nav-cta" data-it="Prenota Call" data-en="Book a Call">Prenota Call</a>
     </div>
-    <button class="hamburger" onclick="toggleMenu()">
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -1231,8 +1266,8 @@
   <a href="#social" onclick="toggleMenu()" data-it="Social" data-en="Social">Social</a>
   <a href="#contact" onclick="toggleMenu()" data-it="Contatti" data-en="Contact">Contatti</a>
   <div style="display:flex;gap:12px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06)">
-    <button onclick="setLang('it');toggleMenu()" style="background:none;border:none;color:#fff;font-family:Inter,sans-serif;font-weight:700;font-size:14px;cursor:pointer">IT</button>
-    <button onclick="setLang('en');toggleMenu()" style="background:none;border:none;color:#555;font-family:Inter,sans-serif;font-weight:700;font-size:14px;cursor:pointer">EN</button>
+    <button id="mobile-btn-it" onclick="setLang('it');toggleMenu()" style="background:none;border:none;color:#fff;font-family:Inter,sans-serif;font-weight:700;font-size:14px;cursor:pointer">IT</button>
+    <button id="mobile-btn-en" onclick="setLang('en');toggleMenu()" style="background:none;border:none;color:#555;font-family:Inter,sans-serif;font-weight:700;font-size:14px;cursor:pointer">EN</button>
   </div>
 </div>
 
@@ -1241,7 +1276,7 @@
   <div class="hero-inner">
     <div class="hero-badge">
       <span class="dot"></span>
-      <span data-it="Entirely AI-Powered" data-en="Entirely AI-Powered">Entirely AI-Powered</span>
+      <span data-it="Interamente AI-Powered" data-en="Entirely AI-Powered">Interamente AI-Powered</span>
     </div>
     <h1 class="hero-h1">
       <span class="line"><span class="word" data-it="Costruiamo." data-en="Build.">Costruiamo.</span></span>
@@ -1376,7 +1411,7 @@
     <!-- E-Commerce -->
     <div class="vertical-block will-animate" id="vblock-ecom">
       <div class="vertical-header" onclick="toggleVertical('ecom')">
-        <div class="vertical-icon" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)">🛒</div>
+        <div class="vertical-icon" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)" aria-hidden="true">🛒</div>
         <div>
           <div class="vertical-num">01</div>
           <div class="vertical-title" data-it="E-Commerce" data-en="E-Commerce">E-Commerce</div>
@@ -1422,7 +1457,7 @@
     <!-- Prop Firm -->
     <div class="vertical-block will-animate" id="vblock-prop" style="margin-top:4px">
       <div class="vertical-header" onclick="toggleVertical('prop')">
-        <div class="vertical-icon" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2)">📈</div>
+        <div class="vertical-icon" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2)" aria-hidden="true">📈</div>
         <div>
           <div class="vertical-num">02</div>
           <div class="vertical-title" data-it="Prop Firm Hedging" data-en="Prop Firm Hedging">Prop Firm Hedging</div>
@@ -1468,7 +1503,7 @@
     <!-- AI -->
     <div class="vertical-block will-animate" id="vblock-ai" style="margin-top:4px">
       <div class="vertical-header" onclick="toggleVertical('ai')">
-        <div class="vertical-icon" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2)">🤖</div>
+        <div class="vertical-icon" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2)" aria-hidden="true">🤖</div>
         <div>
           <div class="vertical-num">03</div>
           <div class="vertical-title" data-it="Intelligenza Artificiale" data-en="Artificial Intelligence">Intelligenza Artificiale</div>
@@ -1532,7 +1567,7 @@
         <div class="sw-card-top">
           <span class="sw-badge" style="background:rgba(16,185,129,0.08);color:#10b981;border-color:rgba(16,185,129,0.2)"
                 data-it="E-Commerce" data-en="E-Commerce">E-Commerce</span>
-          <span class="sw-icon">🛒</span>
+          <span class="sw-icon" aria-hidden="true">🛒</span>
         </div>
         <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
         <h3 data-it="POWERECOM" data-en="POWERECOM">POWERECOM</h3>
@@ -1540,14 +1575,14 @@
            data-en="Finds the winning product via scraping, generates copy with AI and launches your Shopify store. Ready in 3 clicks.">
           Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
         </p>
-        <a href="[URL]" target="_blank" class="sw-link" style="color:#10b981"
+        <a href="[URL]" target="_blank" rel="noopener" class="sw-link" style="color:#10b981"
            data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
       </div>
       <div class="sw-card will-animate">
         <div class="sw-card-top">
           <span class="sw-badge" style="background:rgba(168,85,247,0.08);color:#a855f7;border-color:rgba(168,85,247,0.2)"
                 data-it="Prop Firm" data-en="Prop Firm">Prop Firm</span>
-          <span class="sw-icon">📈</span>
+          <span class="sw-icon" aria-hidden="true">📈</span>
         </div>
         <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
         <h3 data-it="POWERHEDGING" data-en="POWERHEDGING">POWERHEDGING</h3>
@@ -1555,14 +1590,14 @@
            data-en="Monitors all your MT5 accounts in real time, manages records, notifies anomalies and automatically generates lot size, TP and SL for each paired trade. You just place the order.">
           Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
         </p>
-        <a href="[URL]" target="_blank" class="sw-link" style="color:#a855f7"
+        <a href="[URL]" target="_blank" rel="noopener" class="sw-link" style="color:#a855f7"
            data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
       </div>
       <div class="sw-card will-animate">
         <div class="sw-card-top">
           <span class="sw-badge" style="background:rgba(0,212,255,0.08);color:#00d4ff;border-color:rgba(0,212,255,0.2)"
                 data-it="AI" data-en="AI">AI</span>
-          <span class="sw-icon">🤖</span>
+          <span class="sw-icon" aria-hidden="true">🤖</span>
         </div>
         <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
         <h3 data-it="POWERLEADS" data-en="POWERLEADS">POWERLEADS</h3>
@@ -1570,7 +1605,7 @@
            data-en="Finds, qualifies and contacts leads tailored to your business. Three integrated AI modules — scraping, scoring and outreach — running in a loop while you focus on closing.">
           Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura.
         </p>
-        <a href="[URL]" target="_blank" class="sw-link" style="color:#00d4ff"
+        <a href="[URL]" target="_blank" rel="noopener" class="sw-link" style="color:#00d4ff"
            data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
       </div>
     </div>
@@ -1597,33 +1632,11 @@
         <span data-it="Ogni contenuto è creato e ottimizzato con l'AI" data-en="Every piece of content is created and optimized with AI">Ogni contenuto è creato e ottimizzato con l'AI</span>
       </div>
       <div class="social-grid will-animate">
-        <a href="https://www.instagram.com/poweragencyai/" target="_blank" class="social-card">
-          <span class="social-card-icon">📸</span>
+        <a href="https://www.instagram.com/poweragencyai/" target="_blank" rel="noopener" class="social-card">
+          <span class="social-card-icon" aria-hidden="true">📸</span>
           <div>
             <div class="social-card-name">Instagram</div>
-            <div class="social-card-handle">@[handle]</div>
-          </div>
-        </a>
-        <a href="[URL_TIKTOK]" target="_blank" class="social-card">
-          <span class="social-card-icon">🎵</span>
-          <div>
-            <div class="social-card-name">TikTok</div>
-            <div class="social-card-handle">@[handle]</div>
-          </div>
-        </a>
-        <a href="[URL_YOUTUBE]" target="_blank" class="social-card">
-          <span class="social-card-icon">▶️</span>
-          <div>
-            <div class="social-card-name">YouTube</div>
-            <div class="social-card-handle">@[handle]</div>
-          </div>
-        </a>
-
-        <a href="[URL_TELEGRAM]" target="_blank" class="social-card">
-          <span class="social-card-icon">✈️</span>
-          <div>
-            <div class="social-card-name">Telegram</div>
-            <div class="social-card-handle">@[handle]</div>
+            <div class="social-card-handle">@poweragencyai</div>
           </div>
         </a>
       </div>
@@ -1646,19 +1659,19 @@
     </div>
     <div class="stats-row will-animate">
       <div class="stat-cell">
-        <div class="stat-number" style="color:var(--green)">50+</div>
+        <div class="stat-number counter" data-target="50" data-suffix="+" style="color:var(--green)">0</div>
         <div class="stat-label" data-it="Clienti attivi" data-en="Active clients">Clienti attivi</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-number" style="color:var(--purple)">6</div>
+        <div class="stat-number counter" data-target="6" style="color:var(--purple)">0</div>
         <div class="stat-label" data-it="Software proprietari" data-en="Proprietary software">Software proprietari</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-number" style="color:var(--green)">100k+</div>
+        <div class="stat-number counter" data-target="100" data-suffix="k+" style="color:var(--green)">0</div>
         <div class="stat-label" data-it="€ gestiti in e-com" data-en="€ managed in e-com">€ gestiti in e-com</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-number" style="color:var(--white)">1</div>
+        <div class="stat-number counter" data-target="1" style="color:var(--white)">0</div>
         <div class="stat-label" data-it="Anni operativi" data-en="Years operating">Anni operativi</div>
       </div>
     </div>
@@ -2028,33 +2041,65 @@
     </div>
     <div class="contact-grid will-animate">
       <div class="contact-card">
-        <div class="contact-card-icon">💬</div>
+        <div class="contact-card-icon" aria-hidden="true">💬</div>
         <h3 data-it="WhatsApp" data-en="WhatsApp">WhatsApp</h3>
         <p data-it="Scrivici direttamente per una risposta rapida."
            data-en="Message us directly for a quick response.">Scrivici direttamente per una risposta rapida.</p>
-        <a href="https://wa.me/[NUMERO]" target="_blank" class="contact-btn"
+        <a href="https://wa.me/[NUMERO]" target="_blank" rel="noopener" class="contact-btn"
            style="background:#10b981;color:#000"
            data-it="Scrivici ora" data-en="Message us now">Scrivici ora</a>
       </div>
       <div class="contact-card" style="border-top:2px solid var(--white);position:relative">
         <div class="contact-badge" data-it="Consigliato" data-en="Recommended">Consigliato</div>
-        <div class="contact-card-icon">📅</div>
+        <div class="contact-card-icon" aria-hidden="true">📅</div>
         <h3 data-it="Prenota una Call" data-en="Book a Call">Prenota una Call</h3>
         <p data-it="Scegli giorno e orario per una call con il team."
            data-en="Choose day and time for a call with the team.">Scegli giorno e orario per una call con il team.</p>
-        <a href="[URL_CALENDLY]" target="_blank" class="contact-btn"
+        <a href="[URL_CALENDLY]" target="_blank" rel="noopener" class="contact-btn"
            style="background:var(--white);color:#000"
            data-it="Prenota ora" data-en="Book now">Prenota ora</a>
       </div>
       <div class="contact-card">
-        <div class="contact-card-icon">✉️</div>
+        <div class="contact-card-icon" aria-hidden="true">✉️</div>
         <h3 data-it="Email" data-en="Email">Email</h3>
         <p data-it="Scrivici via email per richieste dettagliate."
            data-en="Email us for detailed enquiries.">Scrivici via email per richieste dettagliate.</p>
-        <a href="mailto:[EMAIL]" class="contact-btn"
+        <a href="mailto:info@poweragency.it" class="contact-btn"
            style="background:rgba(255,255,255,0.08);color:#fff;text-decoration:none"
            data-it="Scrivici via email" data-en="Send an email">Scrivici via email</a>
       </div>
+    </div>
+    <div class="form-wrapper will-animate">
+      <h3 data-it="Scrivici un messaggio" data-en="Send us a message">Scrivici un messaggio</h3>
+      <form id="contact-form" action="https://formspree.io/f/xpwdqkba" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact-name" data-it="Nome" data-en="Name">Nome</label>
+            <input type="text" id="contact-name" name="name" required autocomplete="name"
+                   data-it-placeholder="Il tuo nome" data-en-placeholder="Your name" placeholder="Il tuo nome" />
+          </div>
+          <div class="form-group">
+            <label for="contact-email" data-it="Email" data-en="Email">Email</label>
+            <input type="email" id="contact-email" name="email" required autocomplete="email"
+                   data-it-placeholder="La tua email" data-en-placeholder="Your email" placeholder="La tua email" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="contact-vertical" data-it="Verticale di interesse" data-en="Vertical of interest">Verticale di interesse</label>
+          <select id="contact-vertical" name="vertical">
+            <option value="generale" data-it="Generale" data-en="General">Generale</option>
+            <option value="ecommerce" data-it="E-Commerce" data-en="E-Commerce">E-Commerce</option>
+            <option value="propfirm" data-it="Prop Firm" data-en="Prop Firm">Prop Firm</option>
+            <option value="ai" data-it="AI" data-en="AI">AI</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contact-message" data-it="Messaggio" data-en="Message">Messaggio</label>
+          <textarea id="contact-message" name="message" required
+                    data-it-placeholder="Come possiamo aiutarti?" data-en-placeholder="How can we help you?" placeholder="Come possiamo aiutarti?"></textarea>
+        </div>
+        <button type="submit" class="form-submit" data-it="Invia messaggio" data-en="Send message">Invia messaggio</button>
+      </form>
     </div>
   </div>
 </section>
@@ -2070,14 +2115,8 @@
           Costruiamo software, strategie e automazioni per far crescere il tuo business.
         </p>
         <div class="footer-social">
-          <a href="https://www.instagram.com/poweragencyai/" target="_blank" aria-label="Instagram">
+          <a href="https://www.instagram.com/poweragencyai/" target="_blank" rel="noopener" aria-label="Instagram">
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </a>
-          <a href="#" target="_blank" aria-label="LinkedIn">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </a>
-          <a href="#" target="_blank" aria-label="TikTok">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
           </a>
         </div>
       </div>
@@ -2099,15 +2138,15 @@
       <div class="footer-col">
         <div class="footer-col-title" data-it="Contatti" data-en="Contact">Contatti</div>
         <a href="#contact" data-it="Prenota una Call" data-en="Book a Call">Prenota una Call</a>
-        <a href="https://wa.me/[NUMERO]" target="_blank">WhatsApp</a>
-        <a href="mailto:[EMAIL]" data-it="Scrivici" data-en="Email us">Scrivici</a>
+        <a href="https://wa.me/[NUMERO]" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:info@poweragency.it" data-it="Scrivici" data-en="Email us">Scrivici</a>
       </div>
     </div>
 
     <hr class="footer-divider">
 
     <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Power Agency. <span data-it="Tutti i diritti riservati." data-en="All rights reserved.">Tutti i diritti riservati.</span></span>
+      <span class="footer-copy">© <script>document.write(new Date().getFullYear())</script> Power Agency. <span data-it="Tutti i diritti riservati." data-en="All rights reserved.">Tutti i diritti riservati.</span></span>
       <div class="footer-bottom-links">
         <a href="#" data-it="Privacy Policy" data-en="Privacy Policy">Privacy Policy</a>
         <a href="#" data-it="Termini e Condizioni" data-en="Terms & Conditions">Termini e Condizioni</a>
@@ -2375,16 +2414,17 @@
 
   const canvas = document.getElementById('bg-canvas');
   let W = window.innerWidth, H = window.innerHeight;
+  const isMobile = W < 768;
 
   function clamp(v, mn, mx) { return Math.max(mn, Math.min(mx, v)); }
 
   // --- Renderer ---
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isMobile });
   renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 2));
   renderer.setClearColor(0x000000, 0);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled = !isMobile;
+  if (!isMobile) renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   // --- Scene & Camera ---
   const scene = new THREE.Scene();
@@ -2475,7 +2515,11 @@
     const mat = new THREE.PointsMaterial({ size, transparent: true, opacity, sizeAttenuation: true, vertexColors: true, depthWrite: false });
     return new THREE.Points(geo, mat);
   }
-  const starLayers = [
+  const starLayers = isMobile ? [
+    makeStarLayer(600, 0.055, 0.55, 190),
+    makeStarLayer(120, 0.12,  0.80, 165),
+    makeStarLayer(25,  0.22,  0.95, 140),
+  ] : [
     makeStarLayer(1600, 0.055, 0.55, 190),
     makeStarLayer(350,  0.12,  0.80, 165),
     makeStarLayer(55,   0.22,  0.95, 140),
@@ -2498,12 +2542,19 @@
     const mat = new THREE.PointsMaterial({ color, size: 0.65, transparent: true, opacity, sizeAttenuation: true, depthWrite: false });
     return new THREE.Points(geo, mat);
   }
-  scene.add(
-    makeNebula(-28,  10, -48, 0x3a0068, 450, 30, 0.13),
-    makeNebula( 32,  -6, -42, 0x001a55, 300, 24, 0.10),
-    makeNebula(  3,  18, -58, 0x180038, 220, 20, 0.08),
-    makeNebula(-12, -22, -38, 0x3d0018, 160, 16, 0.07),
-  );
+  if (isMobile) {
+    scene.add(
+      makeNebula(-28,  10, -48, 0x3a0068, 150, 30, 0.13),
+      makeNebula( 32,  -6, -42, 0x001a55, 100, 24, 0.10),
+    );
+  } else {
+    scene.add(
+      makeNebula(-28,  10, -48, 0x3a0068, 450, 30, 0.13),
+      makeNebula( 32,  -6, -42, 0x001a55, 300, 24, 0.10),
+      makeNebula(  3,  18, -58, 0x180038, 220, 20, 0.08),
+      makeNebula(-12, -22, -38, 0x3d0018, 160, 16, 0.07),
+    );
+  }
 
   // --- Asteroid ---
   const rockyTex = makeRockyTexture(512);
@@ -2670,7 +2721,7 @@
   const ring3 = mkRing(2.4, 0.11,  0, 0x3D1200); // faint outer glow
 
   // --- Portal vortex — spinning disc of particles inside ring ---
-  const VORTEX_N = 320;
+  const VORTEX_N = isMobile ? 120 : 320;
   const vortexAngles = new Float32Array(VORTEX_N);
   const vortexRadii  = new Float32Array(VORTEX_N);
   const vortexZOff   = new Float32Array(VORTEX_N);
@@ -2691,7 +2742,7 @@
   let vortexTime = 0;
 
   // --- Explosion debris — blue-white plasma + silver dust ---
-  const EXP_COUNT = 1000;
+  const EXP_COUNT = isMobile ? 400 : 1000;
   const expBase    = new Float32Array(EXP_COUNT * 3);
   const expTarget  = new Float32Array(EXP_COUNT * 3);
   const expCurrent = new Float32Array(EXP_COUNT * 3);
@@ -2910,6 +2961,11 @@ function setLang(lang) {
   });
   document.getElementById('btn-it').classList.toggle('active', lang === 'it');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  // Sync mobile menu buttons
+  const mIt = document.getElementById('mobile-btn-it');
+  const mEn = document.getElementById('mobile-btn-en');
+  if (mIt) mIt.style.color = lang === 'it' ? '#fff' : '#555';
+  if (mEn) mEn.style.color = lang === 'en' ? '#fff' : '#555';
 }
 
 // ===================== MOBILE MENU =====================
@@ -2997,12 +3053,13 @@ window.addEventListener('load', () => {
   // Counter animation
   gsap.utils.toArray('.counter').forEach(el => {
     const target = parseInt(el.getAttribute('data-target'));
+    const suffix = el.getAttribute('data-suffix') || '';
     gsap.to({ val: 0 }, {
       val: target,
       scrollTrigger: { trigger: el, start: 'top 85%' },
       duration: 1.8,
       ease: 'power2.out',
-      onUpdate: function() { el.textContent = Math.round(this.targets()[0].val); }
+      onUpdate: function() { el.textContent = Math.round(this.targets()[0].val) + suffix; }
     });
   });
 
