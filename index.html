@@ -888,7 +888,7 @@
 
   /* ---- CONTACT ---- */
   #contact { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-  .contact-inner { text-align: center; margin-bottom: 64px; }
+  .contact-inner { text-align: center; margin-bottom: 56px; }
   .contact-inner h2 {
     font-size: clamp(2.5rem, 6vw, 5rem);
     font-weight: 900;
@@ -896,57 +896,46 @@
     line-height: 1;
     margin-bottom: 20px;
   }
-  .contact-inner p { color: var(--gray-300); font-size: 15px; }
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
+  .contact-inner p { color: var(--gray-300); font-size: 15px; margin-bottom: 0; }
+  .form-wrapper {
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 20px;
+    padding: 56px 48px;
+    background: rgba(255,255,255,0.02);
+    max-width: 720px;
+    margin: 0 auto;
     overflow: hidden;
-    margin-bottom: 48px;
   }
-  .contact-card {
-    background: #000;
-    padding: 40px 32px;
+  /* Top accent line */
+  .form-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    border-radius: 2px;
+  }
+  .form-header {
     text-align: center;
-    transition: background 0.2s;
+    margin-bottom: 40px;
   }
-  .contact-card:hover { background: rgba(255,255,255,0.02); }
-  .contact-card-icon { font-size: 32px; margin-bottom: 16px; }
-  .contact-card h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
-  .contact-card p { color: var(--gray-400); font-size: 13px; margin-bottom: 24px; line-height: 1.6; }
-  .contact-badge {
-    display: inline-block;
-    font-size: 10px; font-weight: 700;
-    background: var(--white); color: #000;
-    padding: 3px 10px; border-radius: 100px;
-    letter-spacing: 0.06em; text-transform: uppercase;
+  .form-header .form-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(200,90,20,0.10);
+    border: 1px solid rgba(200,90,20,0.20);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .form-header .form-icon svg { width: 24px; height: 24px; color: var(--orange); }
+  .form-header h3 {
+    font-size: 24px; font-weight: 800; letter-spacing: -0.03em;
     margin-bottom: 8px;
   }
-  .contact-btn {
-    display: inline-block;
-    padding: 10px 22px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: opacity 0.2s;
-    letter-spacing: -0.01em;
-  }
-  .contact-btn:hover { opacity: 0.8; }
-  .form-wrapper {
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 16px;
-    padding: 48px;
-    background: rgba(255,255,255,0.01);
-    max-width: 640px;
-    margin: 0 auto;
-  }
-  .form-wrapper h3 {
-    font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
-    margin-bottom: 32px;
+  .form-header p {
+    font-size: 14px; color: var(--gray-300); line-height: 1.6;
   }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
   .form-group { margin-bottom: 16px; }
@@ -980,20 +969,20 @@
   .form-group select option { background: #111; }
   .form-submit {
     width: 100%;
-    background: var(--white);
-    color: #000;
+    background: var(--orange);
+    color: #fff;
     border: none;
     border-radius: 100px;
-    padding: 14px;
-    font-size: 14px;
+    padding: 16px;
+    font-size: 15px;
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     letter-spacing: -0.02em;
-    transition: opacity 0.2s;
-    margin-top: 8px;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-top: 12px;
   }
-  .form-submit:hover { opacity: 0.85; }
+  .form-submit:hover { opacity: 0.9; transform: translateY(-1px); }
 
   /* ---- FOOTER ---- */
   footer {
@@ -1093,13 +1082,12 @@
     .stats-row { flex-wrap: wrap; }
     .stat-cell { min-width: 45%; }
     .testimonial-card { width: 300px; }
-    .contact-grid { grid-template-columns: 1fr; }
     .software-grid { grid-template-columns: 1fr; }
     .stats-row { flex-wrap: wrap; }
     .stats-row .stat-cell { flex: 1 1 45%; }
     .stats-row .stat-cell + .stat-cell { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
     .form-row { grid-template-columns: 1fr; }
-    .form-wrapper { padding: 28px 20px; }
+    .form-wrapper { padding: 32px 20px; }
     .container { padding: 0 20px; }
     .angle-tab { font-size: 10px; padding: 12px 10px; }
     .social-grid { gap: 10px; }
@@ -1180,7 +1168,6 @@
   /* Glass card mixin — applies to all card-like elements */
   .sw-card,
   .founder-card,
-  .contact-card,
   .testimonial-card,
   .faq-item,
   .social-card,
@@ -1202,7 +1189,6 @@
   /* Refraction rim — top edge highlight (liquid glass signature) */
   .sw-card::before,
   .founder-card::before,
-  .contact-card::before,
   .testimonial-card::before,
   .faq-item::before {
     content: '';
@@ -1222,8 +1208,7 @@
 
   /* Inner diagonal sheen — top-left light bounce */
   .sw-card::after,
-  .founder-card::after,
-  .contact-card::after {
+  .founder-card::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -2075,42 +2060,24 @@
   <div class="container">
     <div class="contact-inner will-animate">
       <h2 data-it="Pronti a iniziare?" data-en="Ready to start?">Pronti a iniziare?</h2>
-      <p data-it="Scegli come preferisci contattarci." data-en="Choose how you prefer to reach us.">
-        Scegli come preferisci contattarci.
+      <p data-it="Raccontaci il tuo progetto e ti rispondiamo entro 24 ore."
+         data-en="Tell us about your project and we'll get back to you within 24 hours.">
+        Raccontaci il tuo progetto e ti rispondiamo entro 24 ore.
       </p>
     </div>
-    <div class="contact-grid will-animate">
-      <div class="contact-card">
-        <div class="contact-card-icon" aria-hidden="true">💬</div>
-        <h3 data-it="WhatsApp" data-en="WhatsApp">WhatsApp</h3>
-        <p data-it="Scrivici direttamente per una risposta rapida."
-           data-en="Message us directly for a quick response.">Scrivici direttamente per una risposta rapida.</p>
-        <a href="https://wa.me/[NUMERO]" target="_blank" rel="noopener" class="contact-btn"
-           style="background:#10b981;color:#000"
-           data-it="Scrivici ora" data-en="Message us now">Scrivici ora</a>
-      </div>
-      <div class="contact-card" style="border-top:2px solid var(--white);position:relative">
-        <div class="contact-badge" data-it="Consigliato" data-en="Recommended">Consigliato</div>
-        <div class="contact-card-icon" aria-hidden="true">📅</div>
-        <h3 data-it="Prenota una Call" data-en="Book a Call">Prenota una Call</h3>
-        <p data-it="Scegli giorno e orario per una call con il team."
-           data-en="Choose day and time for a call with the team.">Scegli giorno e orario per una call con il team.</p>
-        <a href="[URL_CALENDLY]" target="_blank" rel="noopener" class="contact-btn"
-           style="background:var(--white);color:#000"
-           data-it="Prenota ora" data-en="Book now">Prenota ora</a>
-      </div>
-      <div class="contact-card">
-        <div class="contact-card-icon" aria-hidden="true">✉️</div>
-        <h3 data-it="Email" data-en="Email">Email</h3>
-        <p data-it="Scrivici via email per richieste dettagliate."
-           data-en="Email us for detailed enquiries.">Scrivici via email per richieste dettagliate.</p>
-        <a href="mailto:info@poweragency.it" class="contact-btn"
-           style="background:rgba(255,255,255,0.08);color:#fff;text-decoration:none"
-           data-it="Scrivici via email" data-en="Send an email">Scrivici via email</a>
-      </div>
-    </div>
     <div class="form-wrapper will-animate">
-      <h3 data-it="Scrivici un messaggio" data-en="Send us a message">Scrivici un messaggio</h3>
+      <div class="form-header">
+        <div class="form-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h3 data-it="Scrivici un messaggio" data-en="Send us a message">Scrivici un messaggio</h3>
+        <p data-it="Compila il form e ti ricontatteremo al piu' presto."
+           data-en="Fill out the form and we'll get back to you as soon as possible.">
+          Compila il form e ti ricontatteremo al piu' presto.
+        </p>
+      </div>
       <form id="contact-form" action="https://formspree.io/f/xpwdqkba" method="POST">
         <div class="form-row">
           <div class="form-group">
@@ -2136,9 +2103,9 @@
         <div class="form-group">
           <label for="contact-message" data-it="Messaggio" data-en="Message">Messaggio</label>
           <textarea id="contact-message" name="message" required
-                    data-it-placeholder="Come possiamo aiutarti?" data-en-placeholder="How can we help you?" placeholder="Come possiamo aiutarti?"></textarea>
+                    data-it-placeholder="Raccontaci cosa hai in mente..." data-en-placeholder="Tell us what you have in mind..." placeholder="Raccontaci cosa hai in mente..."></textarea>
         </div>
-        <button type="submit" class="form-submit" data-it="Invia messaggio" data-en="Send message">Invia messaggio</button>
+        <button type="submit" class="form-submit" data-it="Invia messaggio →" data-en="Send message →">Invia messaggio →</button>
       </form>
     </div>
   </div>
