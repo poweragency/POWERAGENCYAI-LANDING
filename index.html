@@ -385,6 +385,7 @@
   /* ---- SECTION LABELS ---- */
   .section-label {
     display: flex; align-items: center; gap: 12px;
+    justify-content: center;
     font-size: 11px;
     font-weight: 700;
     color: var(--orange);
@@ -393,6 +394,11 @@
     margin-bottom: 24px;
   }
   .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--orange);
+  }
+  .section-label::after {
     content: '';
     width: 24px; height: 1px;
     background: var(--orange);
@@ -449,16 +455,19 @@
     line-height: 1.05;
     letter-spacing: -0.04em;
     margin-bottom: 24px;
+    text-align: center;
   }
   .about-left p {
     color: var(--gray-300);
     line-height: 1.7;
     font-size: 15px;
     margin-bottom: 16px;
+    text-align: center;
   }
   .ai-powered-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    margin-top: 24px;
+    margin: 24px auto 0;
+    text-align: left;
     border: 1px solid rgba(0,212,255,0.25);
     background: rgba(0,212,255,0.04);
     border-radius: 8px;
@@ -516,7 +525,7 @@
 
   /* ---- BUSINESS ---- */
   #business { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-  .business-header { max-width: 640px; margin-bottom: 64px; }
+  .business-header { max-width: 640px; margin: 0 auto 64px; text-align: center; }
   .business-header h2 {
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 900;
@@ -603,7 +612,7 @@
 
   /* ---- SOFTWARE ---- */
   #software { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-  .software-header { max-width: 640px; margin-bottom: 64px; }
+  .software-header { max-width: 640px; margin: 0 auto 64px; text-align: center; }
   .software-header h2 {
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 900;
@@ -845,13 +854,14 @@
 
   /* ---- FAQ ---- */
   #faq { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-  .faq-inner { max-width: 720px; }
+  .faq-inner { max-width: 720px; margin: 0 auto; }
   .faq-inner h2 {
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1.05;
     margin-bottom: 48px;
+    text-align: center;
   }
   .faq-item { border-top: 1px solid rgba(255,255,255,0.07); }
   .faq-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
@@ -1641,7 +1651,7 @@
 <section id="social">
   <div class="container">
     <div class="social-inner">
-      <div class="section-label" style="justify-content:center" data-it="Seguici" data-en="Follow Us">Seguici</div>
+      <div class="section-label" data-it="Seguici" data-en="Follow Us">Seguici</div>
       <h2 class="will-animate"
           data-it="Siamo su tutti i canali."
           data-en="We're on every channel.">
