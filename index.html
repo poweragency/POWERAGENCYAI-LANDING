@@ -1008,24 +1008,57 @@
 
   /* ---- FAQ ---- */
   #faq { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-  .faq-inner { max-width: 720px; margin: 0 auto; }
-  .faq-inner h2 {
-    font-size: clamp(2rem, 4vw, 3.2rem);
+  .faq-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .faq-sidebar { position: sticky; top: 120px; }
+  .faq-sidebar h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1.05;
-    margin-bottom: 48px;
-    text-align: center;
+    margin-bottom: 16px;
   }
-  .faq-item { border-top: 1px solid rgba(255,255,255,0.07); }
-  .faq-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .faq-sidebar > p {
+    color: var(--gray-300);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  .faq-sidebar .btn-faq-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    background: rgba(240,180,41,0.1);
+    border: 1px solid rgba(240,180,41,0.25);
+    border-radius: 10px;
+    color: #f0b429;
+    font-size: 13px; font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .faq-sidebar .btn-faq-cta:hover {
+    background: rgba(240,180,41,0.16);
+    border-color: rgba(240,180,41,0.4);
+  }
+  .faq-list { display: flex; flex-direction: column; gap: 10px; }
+  .faq-item {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .faq-item:hover { border-color: rgba(255,255,255,0.12); }
+  .faq-item.open { border-color: rgba(240,180,41,0.2); background: rgba(255,255,255,0.03); }
   .faq-q {
     width: 100%;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 24px 0;
+    padding: 18px 22px;
     background: none; border: none;
     color: var(--white);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
@@ -1034,8 +1067,14 @@
     transition: color 0.2s;
   }
   .faq-q:hover { color: var(--gray-100); }
-  .faq-icon { font-size: 20px; color: var(--gray-400); flex-shrink: 0; transition: transform 0.3s; }
-  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-icon {
+    width: 20px; height: 20px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s;
+  }
+  .faq-icon svg { width: 14px; height: 14px; stroke: var(--gray-400); stroke-width: 2; fill: none; }
+  .faq-item.open .faq-icon { transform: rotate(180deg); }
+  .faq-item.open .faq-icon svg { stroke: #f0b429; }
   .faq-a {
     max-height: 0;
     overflow: hidden;
@@ -1044,9 +1083,9 @@
   .faq-item.open .faq-a { max-height: 300px; }
   .faq-a p {
     color: var(--gray-300);
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.75;
-    padding-bottom: 24px;
+    padding: 0 22px 18px;
     max-width: 580px;
   }
 
@@ -1067,7 +1106,7 @@
     border-radius: 20px;
     padding: 56px 48px;
     background: rgba(255,255,255,0.02);
-    max-width: 720px;
+    max-width: 960px;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -1274,6 +1313,8 @@
     .stats-row { flex-wrap: wrap; }
     .stats-row .stat-cell { flex: 1 1 45%; }
     .stats-row .stat-cell + .stat-cell { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
+    .faq-layout { grid-template-columns: 1fr; gap: 32px; }
+    .faq-sidebar { position: static; text-align: center; }
     .form-row { grid-template-columns: 1fr; }
     .form-wrapper { padding: 32px 20px; }
     .container { padding: 0 20px; }
@@ -2243,81 +2284,86 @@
 <!-- FAQ -->
 <section id="faq">
   <div class="container">
-    <div class="faq-inner will-animate">
-      <div class="section-label" data-it="FAQ" data-en="FAQ">FAQ</div>
-      <h2 data-it="Domande frequenti." data-en="Frequently asked questions.">Domande frequenti.</h2>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="Come funziona la collaborazione con Power Agency?"
-                data-en="How does collaboration with Power Agency work?">Come funziona la collaborazione con Power Agency?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><p data-it="Dipende dal tipo di collaborazione. Per i software puoi acquistare direttamente online. Per consulenza iniziamo con una call gratuita di 30 minuti. Per le partnership operative valutiamo insieme il tuo profilo e obiettivi."
-             data-en="It depends on the type of collaboration. For software you can purchase directly online. For consulting we start with a free 30-minute call. For operational partnerships we evaluate your profile and goals together.">Dipende dal tipo di collaborazione. Per i software puoi acquistare direttamente online. Per consulenza iniziamo con una call gratuita di 30 minuti. Per le partnership operative valutiamo insieme il tuo profilo e obiettivi.</p></div>
+    <div class="faq-layout will-animate">
+      <div class="faq-sidebar">
+        <div class="section-label" data-it="FAQ" data-en="FAQ">FAQ</div>
+        <h2 data-it="Domande frequenti." data-en="Frequently asked questions.">Domande frequenti.</h2>
+        <p data-it="Non trovi la risposta che cerchi? Scrivici e ti rispondiamo entro 24 ore."
+           data-en="Can't find the answer you're looking for? Write to us and we'll reply within 24 hours.">
+          Non trovi la risposta che cerchi? Scrivici e ti rispondiamo entro 24 ore.
+        </p>
+        <a href="#contact" class="btn-faq-cta" data-it="Contattaci →" data-en="Contact us →">Contattaci →</a>
       </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="Posso acquistare solo il software senza consulenza?"
-                data-en="Can I buy just the software without consulting?">Posso acquistare solo il software senza consulenza?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><p data-it="Sì, tutti i nostri software sono acquistabili in autonomia. Includono documentazione completa e supporto via chat. La consulenza è opzionale ma consigliata per chi è alle prime armi con il verticale."
-             data-en="Yes, all our software can be purchased independently. They include complete documentation and chat support. Consulting is optional but recommended for those new to the vertical.">Sì, tutti i nostri software sono acquistabili in autonomia. Includono documentazione completa e supporto via chat. La consulenza è opzionale ma consigliata per chi è alle prime armi con il verticale.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="I software sono adatti anche ai principianti?"
-                data-en="Are the software tools suitable for beginners?">I software sono adatti anche ai principianti?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><p data-it="POWERECOM e POWERLEADS hanno un'interfaccia intuitiva pensata per chi inizia. POWERHEDGING richiede una comprensione base delle prop firm — per questo offriamo un percorso di formazione dedicato."
-             data-en="POWERECOM and POWERLEADS have an intuitive interface designed for beginners. POWERHEDGING requires a basic understanding of prop firms — which is why we offer a dedicated training path.">POWERECOM e POWERLEADS hanno un'interfaccia intuitiva pensata per chi inizia. POWERHEDGING richiede una comprensione base delle prop firm — per questo offriamo un percorso di formazione dedicato.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="Come prenoto una call con il team?"
-                data-en="How do I book a call with the team?">Come prenoto una call con il team?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <p data-it="Usa il link Calendly nella sezione contatti, oppure scrivici direttamente su WhatsApp."
-             data-en="Use the Calendly link in the contact section, or message us directly on WhatsApp.">
-            Usa il link Calendly nella sezione contatti, oppure scrivici direttamente su WhatsApp.
-          </p>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="Come funziona la collaborazione con Power Agency?"
+                  data-en="How does collaboration with Power Agency work?">Come funziona la collaborazione con Power Agency?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="Dipende dal tipo di collaborazione. Per i software puoi acquistare direttamente online. Per consulenza iniziamo con una call gratuita di 30 minuti. Per le partnership operative valutiamo insieme il tuo profilo e obiettivi."
+               data-en="It depends on the type of collaboration. For software you can purchase directly online. For consulting we start with a free 30-minute call. For operational partnerships we evaluate your profile and goals together.">Dipende dal tipo di collaborazione. Per i software puoi acquistare direttamente online. Per consulenza iniziamo con una call gratuita di 30 minuti. Per le partnership operative valutiamo insieme il tuo profilo e obiettivi.</p></div>
         </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="I software funzionano su qualsiasi dispositivo?" data-en="Do the software tools work on any device?">I software funzionano su qualsiasi dispositivo?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><p data-it="Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale."
-             data-en="Yes, all our platforms are accessible via browser on desktop and mobile. No local installation required.">Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale.</p></div>
-      </div>
-      <!-- TODO: sostituire i prezzi placeholder con quelli reali quando disponibili -->
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="Quanto costano i software?" data-en="How much do the software tools cost?">Quanto costano i software?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><p data-it="Ogni software ha un piano adatto a diverse esigenze. Contattaci per ricevere il listino aggiornato e scoprire quale soluzione è più adatta al tuo caso — la prima call è sempre gratuita."
-             data-en="Each software has a plan to fit different needs. Contact us to get the updated pricing and find out which solution fits your case best — the first call is always free.">Ogni software ha un piano adatto a diverse esigenze. Contattaci per ricevere il listino aggiornato e scoprire quale soluzione è più adatta al tuo caso — la prima call è sempre gratuita.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="Quanto dura il percorso di formazione?" data-en="How long is the training program?">Quanto dura il percorso di formazione?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><p data-it="Il percorso e-commerce dura 8 settimane. Per prop firm hedging e AI la durata varia in base al tuo livello di partenza e agli obiettivi — la definiamo insieme durante la call conoscitiva gratuita."
-             data-en="The e-commerce program lasts 8 weeks. For prop firm hedging and AI, the duration depends on your starting level and goals — we define it together during the free discovery call.">Il percorso e-commerce dura 8 settimane. Per prop firm hedging e AI la durata varia in base al tuo livello di partenza e agli obiettivi — la definiamo insieme durante la call conoscitiva gratuita.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span data-it="Che risultati posso aspettarmi realisticamente?" data-en="What results can I realistically expect?">Che risultati posso aspettarmi realisticamente?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a"><p data-it="Dipende dal verticale e dal tuo impegno. I nostri clienti e-commerce lanciano il primo store in meno di una settimana. Chi usa POWERHEDGING risparmia ore di calcoli manuali fin dal primo giorno. Per l'AI, i team aziendali vedono risultati misurabili entro 30 giorni. Numeri reali, non promesse."
-             data-en="It depends on the vertical and your commitment. Our e-commerce clients launch their first store in less than a week. POWERHEDGING users save hours of manual calculations from day one. For AI, business teams see measurable results within 30 days. Real numbers, not promises.">Dipende dal verticale e dal tuo impegno. I nostri clienti e-commerce lanciano il primo store in meno di una settimana. Chi usa POWERHEDGING risparmia ore di calcoli manuali fin dal primo giorno. Per l'AI, i team aziendali vedono risultati misurabili entro 30 giorni. Numeri reali, non promesse.</p></div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="Posso acquistare solo il software senza consulenza?"
+                  data-en="Can I buy just the software without consulting?">Posso acquistare solo il software senza consulenza?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="Sì, tutti i nostri software sono acquistabili in autonomia. Includono documentazione completa e supporto via chat. La consulenza è opzionale ma consigliata per chi è alle prime armi con il verticale."
+               data-en="Yes, all our software can be purchased independently. They include complete documentation and chat support. Consulting is optional but recommended for those new to the vertical.">Sì, tutti i nostri software sono acquistabili in autonomia. Includono documentazione completa e supporto via chat. La consulenza è opzionale ma consigliata per chi è alle prime armi con il verticale.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="I software sono adatti anche ai principianti?"
+                  data-en="Are the software tools suitable for beginners?">I software sono adatti anche ai principianti?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="POWERECOM e POWERLEADS hanno un'interfaccia intuitiva pensata per chi inizia. POWERHEDGING richiede una comprensione base delle prop firm — per questo offriamo un percorso di formazione dedicato."
+               data-en="POWERECOM and POWERLEADS have an intuitive interface designed for beginners. POWERHEDGING requires a basic understanding of prop firms — which is why we offer a dedicated training path.">POWERECOM e POWERLEADS hanno un'interfaccia intuitiva pensata per chi inizia. POWERHEDGING richiede una comprensione base delle prop firm — per questo offriamo un percorso di formazione dedicato.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="Come prenoto una call con il team?"
+                  data-en="How do I book a call with the team?">Come prenoto una call con il team?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="Usa il link Calendly nella sezione contatti, oppure scrivici direttamente su WhatsApp."
+               data-en="Use the Calendly link in the contact section, or message us directly on WhatsApp.">Usa il link Calendly nella sezione contatti, oppure scrivici direttamente su WhatsApp.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="I software funzionano su qualsiasi dispositivo?" data-en="Do the software tools work on any device?">I software funzionano su qualsiasi dispositivo?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale."
+               data-en="Yes, all our platforms are accessible via browser on desktop and mobile. No local installation required.">Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale.</p></div>
+        </div>
+        <!-- TODO: sostituire i prezzi placeholder con quelli reali quando disponibili -->
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="Quanto costano i software?" data-en="How much do the software tools cost?">Quanto costano i software?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="Ogni software ha un piano adatto a diverse esigenze. Contattaci per ricevere il listino aggiornato e scoprire quale soluzione è più adatta al tuo caso — la prima call è sempre gratuita."
+               data-en="Each software has a plan to fit different needs. Contact us to get the updated pricing and find out which solution fits your case best — the first call is always free.">Ogni software ha un piano adatto a diverse esigenze. Contattaci per ricevere il listino aggiornato e scoprire quale soluzione è più adatta al tuo caso — la prima call è sempre gratuita.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="Quanto dura il percorso di formazione?" data-en="How long is the training program?">Quanto dura il percorso di formazione?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="Il percorso e-commerce dura 8 settimane. Per prop firm hedging e AI la durata varia in base al tuo livello di partenza e agli obiettivi — la definiamo insieme durante la call conoscitiva gratuita."
+               data-en="The e-commerce program lasts 8 weeks. For prop firm hedging and AI, the duration depends on your starting level and goals — we define it together during the free discovery call.">Il percorso e-commerce dura 8 settimane. Per prop firm hedging e AI la durata varia in base al tuo livello di partenza e agli obiettivi — la definiamo insieme durante la call conoscitiva gratuita.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span data-it="Che risultati posso aspettarmi realisticamente?" data-en="What results can I realistically expect?">Che risultati posso aspettarmi realisticamente?</span>
+            <span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="faq-a"><p data-it="Dipende dal verticale e dal tuo impegno. I nostri clienti e-commerce lanciano il primo store in meno di una settimana. Chi usa POWERHEDGING risparmia ore di calcoli manuali fin dal primo giorno. Per l'AI, i team aziendali vedono risultati misurabili entro 30 giorni. Numeri reali, non promesse."
+               data-en="It depends on the vertical and your commitment. Our e-commerce clients launch their first store in less than a week. POWERHEDGING users save hours of manual calculations from day one. For AI, business teams see measurable results within 30 days. Real numbers, not promises.">Dipende dal verticale e dal tuo impegno. I nostri clienti e-commerce lanciano il primo store in meno di una settimana. Chi usa POWERHEDGING risparmia ore di calcoli manuali fin dal primo giorno. Per l'AI, i team aziendali vedono risultati misurabili entro 30 giorni. Numeri reali, non promesse.</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -3313,11 +3359,9 @@ function toggleFaq(btn) {
   const isOpen = item.classList.contains('open');
   document.querySelectorAll('.faq-item').forEach(i => {
     i.classList.remove('open');
-    i.querySelector('.faq-icon').textContent = '+';
   });
   if (!isOpen) {
     item.classList.add('open');
-    item.querySelector('.faq-icon').textContent = '×';
   }
 }
 
