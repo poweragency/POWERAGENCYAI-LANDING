@@ -592,61 +592,56 @@
 
   /* ---- ABOUT ---- */
   #about { padding: 120px 0; }
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
+  .about-header {
+    max-width: 640px;
+    margin: 0 auto 56px;
+    text-align: center;
   }
-  .about-left h2 {
+  .about-header h2 {
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 900;
     line-height: 1.05;
     letter-spacing: -0.04em;
-    margin-bottom: 24px;
-    text-align: center;
+    margin-bottom: 20px;
   }
-  .about-left p {
+  .about-header p {
     color: var(--gray-300);
     line-height: 1.7;
     font-size: 15px;
-    margin-bottom: 16px;
-    text-align: center;
   }
-  .ai-powered-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    margin: 24px auto 0;
-    text-align: left;
-    border: 1px solid rgba(0,212,255,0.25);
-    background: rgba(0,212,255,0.04);
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--cyan);
+  .founders-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
   }
-  .ai-powered-badge .icon { font-size: 16px; }
-  .founders-list { display: flex; flex-direction: column; gap: 16px; }
   .founder-card {
     border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 32px 24px;
     background: rgba(255,255,255,0.02);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: border-color 0.3s;
+    text-align: center;
+    transition: border-color 0.3s, background 0.3s;
+    position: relative;
+    overflow: hidden;
   }
-  .founder-card:hover { border-color: rgba(255,255,255,0.14); }
+  .founder-card:hover { background: rgba(255,255,255,0.035); }
+  .founder-card--green:hover { border-color: rgba(16,185,129,0.25); }
+  .founder-card--purple:hover { border-color: rgba(168,85,247,0.25); }
+  .founder-card--blue:hover { border-color: rgba(0,212,255,0.25); }
   .founder-avatar {
-    width: 44px; height: 44px;
-    border-radius: 50%;
+    width: 56px; height: 56px;
+    border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 14px;
-    flex-shrink: 0;
+    font-weight: 800; font-size: 16px;
+    margin: 0 auto 16px;
   }
-  .founder-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-  .founder-info p { font-size: 12px; color: var(--gray-400); }
+  .founder-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .founder-role { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .founder-desc {
+    font-size: 13px; color: var(--gray-300); line-height: 1.6;
+    margin-top: 12px;
+  }
   .metrics-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -655,10 +650,9 @@
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 14px;
     overflow: hidden;
-    margin-top: 40px;
   }
   .metric-cell {
-    background: #000;
+    background: rgba(0,0,0,0.6);
     padding: 28px 24px;
     text-align: center;
   }
@@ -1302,7 +1296,7 @@
   @media (max-width: 768px) {
     .nav-links, .nav-right { display: none; }
     .hamburger { display: flex; }
-    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .founders-row { grid-template-columns: 1fr; }
     .stats-row { flex-wrap: wrap; }
     .stat-cell { min-width: 45%; }
     .testimonial-card { width: 300px; }
@@ -1617,68 +1611,58 @@
 <!-- CHI SIAMO -->
 <section id="about">
   <div class="container">
-    <div class="about-grid">
-      <div class="about-left will-animate">
-        <div class="section-label" data-it="Chi Siamo" data-en="About Us">Chi Siamo</div>
-        <h2 data-it="Chi siamo: un'agenzia specializzata in E-Commerce, Prop Firm e AI"
-            data-en="About us: an agency specialized in E-Commerce, Prop Firm and AI">
-          Chi siamo: un'agenzia specializzata in E-Commerce, Prop Firm e AI
-        </h2>
-        <p data-it="Siamo tre professionisti che gestiscono store e-commerce da 6 cifre al mese, operano su prop firm con strategie di hedging proprietarie e costruiscono automazioni AI per aziende reali."
-           data-en="We are three professionals who run 6-figure monthly e-commerce stores, operate on prop firms with proprietary hedging strategies, and build AI automations for real businesses.">
-          Siamo tre professionisti che gestiscono store e-commerce da 6 cifre al mese, operano su prop firm con strategie di hedging proprietarie e costruiscono automazioni AI per aziende reali.
+    <div class="about-header will-animate">
+      <div class="section-label" data-it="Chi Siamo" data-en="About Us">Chi Siamo</div>
+      <h2 data-it="Tre professionisti, tre mercati, un unico team."
+          data-en="Three professionals, three markets, one team.">
+        Tre professionisti, tre mercati, un unico team.
+      </h2>
+      <p data-it="Operiamo ogni giorno negli stessi mercati in cui ti formiamo. I nostri software, processi e automazioni sono interamente costruiti con l'intelligenza artificiale."
+         data-en="We operate daily in the same markets we train you in. Our software, processes, and automations are entirely built with artificial intelligence.">
+        Operiamo ogni giorno negli stessi mercati in cui ti formiamo. I nostri software, processi e automazioni sono interamente costruiti con l'intelligenza artificiale.
+      </p>
+    </div>
+    <div class="founders-row will-animate">
+      <div class="founder-card founder-card--green">
+        <div class="founder-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">VI</div>
+        <div class="founder-name">Vincenzo</div>
+        <div class="founder-role" style="color:#10b981" data-it="E-Commerce" data-en="E-Commerce">E-Commerce</div>
+        <p class="founder-desc" data-it="Gestisce store e-commerce da 6 cifre al mese. Dal product research allo scaling, costruisce e automatizza ogni processo."
+           data-en="Runs 6-figure monthly e-commerce stores. From product research to scaling, builds and automates every process.">
+          Gestisce store e-commerce da 6 cifre al mese. Dal product research allo scaling, costruisce e automatizza ogni processo.
         </p>
-        <p data-it="Non vendiamo teorie: operiamo ogni giorno negli stessi mercati in cui ti formiamo. I nostri software, processi e automazioni sono interamente costruiti con l'intelligenza artificiale."
-           data-en="We don't sell theories: we operate daily in the same markets we train you in. Our software, processes, and automations are entirely built with artificial intelligence.">
-          Non vendiamo teorie: operiamo ogni giorno negli stessi mercati in cui ti formiamo. I nostri software, processi e automazioni sono interamente costruiti con l'intelligenza artificiale.
-        </p>
-        <div class="ai-powered-badge">
-          <span class="icon">⚡</span>
-          <span data-it="AI-Powered — Dal copy dei prodotti al calcolo dei lotti, ogni nostro software è costruito con intelligenza artificiale."
-                data-en="AI-Powered — From product copy to lot calculation, every software we build is powered by artificial intelligence.">
-            AI-Powered — Dal copy dei prodotti al calcolo dei lotti, ogni nostro software è costruito con intelligenza artificiale.
-          </span>
-        </div>
-        <div class="metrics-row will-animate" style="margin-top:40px">
-          <div class="metric-cell">
-            <div class="metric-number counter" data-target="3">0</div>
-            <div class="metric-label" data-it="Verticali" data-en="Verticals">Verticali</div>
-          </div>
-          <div class="metric-cell">
-            <div class="metric-number counter" data-target="6">0</div>
-            <div class="metric-label" data-it="Software" data-en="Software">Software</div>
-          </div>
-          <div class="metric-cell">
-            <div class="metric-number counter" data-target="50">0</div>
-            <div class="metric-label" data-it="Clienti" data-en="Clients">Clienti</div>
-          </div>
-        </div>
       </div>
-      <div class="will-animate">
-        <div class="section-label" style="margin-bottom:20px" data-it="Il Team" data-en="The Team">Il Team</div>
-        <div class="founders-list">
-          <div class="founder-card">
-            <div class="founder-avatar" style="background:rgba(16,185,129,0.15);color:#10b981">VI</div>
-            <div class="founder-info">
-              <h4 data-it="Vincenzo" data-en="Vincenzo">Vincenzo</h4>
-              <p data-it="E-Commerce" data-en="E-Commerce">E-Commerce</p>
-            </div>
-          </div>
-          <div class="founder-card">
-            <div class="founder-avatar" style="background:rgba(168,85,247,0.15);color:var(--purple)">WA</div>
-            <div class="founder-info">
-              <h4 data-it="Wassim" data-en="Wassim">Wassim</h4>
-              <p data-it="Prop Firm" data-en="Prop Firm">Prop Firm</p>
-            </div>
-          </div>
-          <div class="founder-card">
-            <div class="founder-avatar" style="background:rgba(0,212,255,0.12);color:#00d4ff">MA</div>
-            <div class="founder-info">
-              <h4 data-it="Mattia" data-en="Mattia">Mattia</h4>
-              <p data-it="AI" data-en="AI">AI</p>
-            </div>
-          </div>
-        </div>
+      <div class="founder-card founder-card--purple">
+        <div class="founder-avatar" style="background:rgba(168,85,247,0.15);color:#a855f7">WA</div>
+        <div class="founder-name">Wassim</div>
+        <div class="founder-role" style="color:#a855f7" data-it="Prop Firm" data-en="Prop Firm">Prop Firm</div>
+        <p class="founder-desc" data-it="Opera su prop firm con strategie di hedging proprietarie. Ha sviluppato il software che automatizza lottaggio, TP e SL."
+           data-en="Operates on prop firms with proprietary hedging strategies. Built the software that automates lot sizing, TP and SL.">
+          Opera su prop firm con strategie di hedging proprietarie. Ha sviluppato il software che automatizza lottaggio, TP e SL.
+        </p>
+      </div>
+      <div class="founder-card founder-card--blue">
+        <div class="founder-avatar" style="background:rgba(0,212,255,0.12);color:#00d4ff">MA</div>
+        <div class="founder-name">Mattia</div>
+        <div class="founder-role" style="color:#00d4ff" data-it="AI" data-en="AI">AI</div>
+        <p class="founder-desc" data-it="Costruisce automazioni AI e software custom per aziende reali. Dal lead generation ai workflow complessi, tutto con intelligenza artificiale."
+           data-en="Builds AI automations and custom software for real businesses. From lead generation to complex workflows, all with artificial intelligence.">
+          Costruisce automazioni AI e software custom per aziende reali. Dal lead generation ai workflow complessi, tutto con intelligenza artificiale.
+        </p>
+      </div>
+    </div>
+    <div class="metrics-row will-animate">
+      <div class="metric-cell">
+        <div class="metric-number counter" data-target="3">0</div>
+        <div class="metric-label" data-it="Verticali" data-en="Verticals">Verticali</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-number counter" data-target="6">0</div>
+        <div class="metric-label" data-it="Software" data-en="Software">Software</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-number counter" data-target="50">0</div>
+        <div class="metric-label" data-it="Clienti" data-en="Clients">Clienti</div>
       </div>
     </div>
   </div>
