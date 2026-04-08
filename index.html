@@ -813,7 +813,7 @@
 
   /* ---- SOFTWARE ---- */
   #software { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-  .software-header { max-width: 640px; margin: 0 auto 64px; text-align: center; }
+  .software-header { max-width: 640px; margin: 0 auto 56px; text-align: center; }
   .software-header h2 {
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 900;
@@ -822,38 +822,34 @@
     margin-bottom: 20px;
   }
   .software-header p { color: var(--gray-300); font-size: 15px; line-height: 1.7; }
-  .software-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px;
-    overflow: hidden;
-  }
+  .software-stack { display: flex; flex-direction: column; gap: 20px; }
   .sw-card {
-    background: #000;
-    padding: 32px;
-    transition: background 0.3s;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 48px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 36px 40px;
     position: relative;
     overflow: hidden;
+    transition: border-color 0.4s, background 0.4s;
   }
-  .sw-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(200,90,20,0.04), transparent);
-    opacity: 0;
-    transition: opacity 0.4s;
-    pointer-events: none;
-  }
-  .sw-card:hover::before { opacity: 1; }
-  .sw-card:hover { background: rgba(255,255,255,0.015); }
-  .sw-card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  .sw-card:hover { background: rgba(255,255,255,0.035); }
+  .sw-card:nth-child(even) .sw-card-visual { order: 2; }
+  .sw-card:nth-child(even) .sw-card-body { order: 1; }
+  .sw-card--green:hover { border-color: rgba(16,185,129,0.25); box-shadow: inset 0 0 60px rgba(16,185,129,0.04), 0 0 30px rgba(16,185,129,0.06); }
+  .sw-card--purple:hover { border-color: rgba(168,85,247,0.25); box-shadow: inset 0 0 60px rgba(168,85,247,0.04), 0 0 30px rgba(168,85,247,0.06); }
+  .sw-card--blue:hover { border-color: rgba(0,212,255,0.25); box-shadow: inset 0 0 60px rgba(0,212,255,0.04), 0 0 30px rgba(0,212,255,0.06); }
+  .sw-card-visual {
+    height: 180px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.02);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--gray-400);
+    font-weight: 500; letter-spacing: 0.03em;
   }
   .sw-badge {
     display: inline-flex; align-items: center; gap: 5px;
@@ -862,10 +858,27 @@
     padding: 4px 10px;
     border-radius: 100px;
     border: 1px solid;
+    margin-bottom: 14px;
   }
-  .sw-icon { font-size: 32px; }
-  .sw-card h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px; }
-  .sw-card p { color: var(--gray-300); font-size: 13px; line-height: 1.65; margin-bottom: 24px; }
+  .sw-card-body h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .sw-card-body > p { color: var(--gray-300); font-size: 13px; line-height: 1.65; margin-bottom: 16px; }
+  .sw-features {
+    list-style: none; padding: 0; margin: 0 0 20px;
+    display: flex; flex-wrap: wrap; gap: 6px 16px;
+  }
+  .sw-features li {
+    font-size: 12px; color: var(--gray-300);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sw-features li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sw-card--green .sw-features li::before { background: #10b981; }
+  .sw-card--purple .sw-features li::before { background: #a855f7; }
+  .sw-card--blue .sw-features li::before { background: #00d4ff; }
   .sw-link {
     display: inline-flex; align-items: center; gap: 6px;
     font-size: 13px; font-weight: 600;
@@ -873,17 +886,6 @@
     transition: gap 0.2s;
   }
   .sw-link:hover { gap: 10px; }
-  .sw-mockup {
-    height: 80px;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 8px;
-    background: rgba(255,255,255,0.02);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; color: var(--gray-400);
-    margin-bottom: 20px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-  }
 
   /* ---- PROOF ---- */
   #proof { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
@@ -1265,7 +1267,10 @@
     .stats-row { flex-wrap: wrap; }
     .stat-cell { min-width: 45%; }
     .testimonial-card { width: 300px; }
-    .software-grid { grid-template-columns: 1fr; }
+    .sw-card { grid-template-columns: 1fr; gap: 20px; padding: 24px 20px; }
+    .sw-card:nth-child(even) .sw-card-visual { order: 0; }
+    .sw-card:nth-child(even) .sw-card-body { order: 0; }
+    .sw-card-visual { height: 140px; }
     .stats-row { flex-wrap: wrap; }
     .stats-row .stat-cell { flex: 1 1 45%; }
     .stats-row .stat-cell + .stat-cell { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
@@ -1836,54 +1841,73 @@
         Ogni software che vendiamo nasce da un'esigenza reale dei nostri business in e-commerce, prop firm hedging e AI. Li usiamo ogni giorno prima ancora di proporli.
       </p>
     </div>
-    <div class="software-grid">
-      <div class="sw-card will-animate">
-        <div class="sw-card-top">
+    <div class="software-stack">
+
+      <!-- POWERECOM -->
+      <div class="sw-card sw-card--green will-animate">
+        <div class="sw-card-visual" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
+        <div class="sw-card-body">
           <span class="sw-badge" style="background:rgba(16,185,129,0.08);color:#10b981;border-color:rgba(16,185,129,0.2)"
                 data-it="E-Commerce" data-en="E-Commerce">E-Commerce</span>
-          <span class="sw-icon" aria-hidden="true">🛒</span>
+          <h3 data-it="POWERECOM" data-en="POWERECOM">POWERECOM</h3>
+          <p data-it="Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store Shopify in dropshipping. Pronto in 3 click."
+             data-en="Finds the winning product via scraping, generates copy with AI and launches your Shopify store. Ready in 3 clicks.">
+            Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
+          </p>
+          <ul class="sw-features">
+            <li data-it="Scraping prodotti" data-en="Product scraping">Scraping prodotti</li>
+            <li data-it="Copy AI automatico" data-en="Automatic AI copy">Copy AI automatico</li>
+            <li data-it="Lancio 1-click su Shopify" data-en="1-click Shopify launch">Lancio 1-click su Shopify</li>
+          </ul>
+          <!-- TODO: sostituire href="#contact" con URL reale POWERECOM quando disponibile -->
+          <a href="#contact" class="sw-link" style="color:#10b981"
+             data-it="Lancia il tuo store →" data-en="Launch your store →">Lancia il tuo store →</a>
         </div>
-        <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
-        <h3 data-it="POWERECOM" data-en="POWERECOM">POWERECOM</h3>
-        <p data-it="Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store Shopify in dropshipping. Pronto in 3 click."
-           data-en="Finds the winning product via scraping, generates copy with AI and launches your Shopify store. Ready in 3 clicks.">
-          Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
-        </p>
-        <!-- TODO: sostituire href="#contact" con URL reale POWERECOM quando disponibile -->
-        <a href="#contact" class="sw-link" style="color:#10b981"
-           data-it="Lancia il tuo store →" data-en="Launch your store →">Lancia il tuo store →</a>
       </div>
-      <div class="sw-card will-animate">
-        <div class="sw-card-top">
+
+      <!-- POWERHEDGING -->
+      <div class="sw-card sw-card--purple will-animate">
+        <div class="sw-card-visual" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
+        <div class="sw-card-body">
           <span class="sw-badge" style="background:rgba(168,85,247,0.08);color:#a855f7;border-color:rgba(168,85,247,0.2)"
                 data-it="Prop Firm" data-en="Prop Firm">Prop Firm</span>
-          <span class="sw-icon" aria-hidden="true">📈</span>
+          <h3 data-it="POWERHEDGING" data-en="POWERHEDGING">POWERHEDGING</h3>
+          <p data-it="Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine."
+             data-en="Monitors all your MT5 accounts in real time, manages records, notifies anomalies and automatically generates lot size, TP and SL for each paired trade. You just place the order.">
+            Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
+          </p>
+          <ul class="sw-features">
+            <li data-it="Monitoraggio MT5 real-time" data-en="Real-time MT5 monitoring">Monitoraggio MT5 real-time</li>
+            <li data-it="Lottaggio automatico" data-en="Automatic lot sizing">Lottaggio automatico</li>
+            <li data-it="TP & SL per accoppiamento" data-en="TP & SL per pairing">TP & SL per accoppiamento</li>
+          </ul>
+          <!-- TODO: sostituire href="#contact" con URL reale POWERHEDGING quando disponibile -->
+          <a href="#contact" class="sw-link" style="color:#a855f7"
+             data-it="Automatizza il trading →" data-en="Automate your trading →">Automatizza il trading →</a>
         </div>
-        <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
-        <h3 data-it="POWERHEDGING" data-en="POWERHEDGING">POWERHEDGING</h3>
-        <p data-it="Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine."
-           data-en="Monitors all your MT5 accounts in real time, manages records, notifies anomalies and automatically generates lot size, TP and SL for each paired trade. You just place the order.">
-          Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
-        </p>
-        <!-- TODO: sostituire href="#contact" con URL reale POWERHEDGING quando disponibile -->
-        <a href="#contact" class="sw-link" style="color:#a855f7"
-           data-it="Automatizza il trading →" data-en="Automate your trading →">Automatizza il trading →</a>
       </div>
-      <div class="sw-card will-animate">
-        <div class="sw-card-top">
+
+      <!-- POWERLEADS -->
+      <div class="sw-card sw-card--blue will-animate">
+        <div class="sw-card-visual" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
+        <div class="sw-card-body">
           <span class="sw-badge" style="background:rgba(0,212,255,0.08);color:#00d4ff;border-color:rgba(0,212,255,0.2)"
                 data-it="AI" data-en="AI">AI</span>
-          <span class="sw-icon" aria-hidden="true">🤖</span>
+          <h3 data-it="POWERLEADS" data-en="POWERLEADS">POWERLEADS</h3>
+          <p data-it="Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura."
+             data-en="Finds, qualifies and contacts leads tailored to your business. Three integrated AI modules — scraping, scoring and outreach — running in a loop while you focus on closing.">
+            Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura.
+          </p>
+          <ul class="sw-features">
+            <li data-it="Scraping lead mirati" data-en="Targeted lead scraping">Scraping lead mirati</li>
+            <li data-it="Scoring AI integrato" data-en="Integrated AI scoring">Scoring AI integrato</li>
+            <li data-it="Outreach automatizzato" data-en="Automated outreach">Outreach automatizzato</li>
+          </ul>
+          <a href="https://powerleads.poweragencyai.com/" target="_blank" rel="noopener" class="sw-link" style="color:#00d4ff"
+             data-it="Genera lead ora →" data-en="Generate leads now →">Genera lead ora →</a>
         </div>
-        <div class="sw-mockup" data-it="[Screenshot]" data-en="[Screenshot]">[Screenshot]</div>
-        <h3 data-it="POWERLEADS" data-en="POWERLEADS">POWERLEADS</h3>
-        <p data-it="Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura."
-           data-en="Finds, qualifies and contacts leads tailored to your business. Three integrated AI modules — scraping, scoring and outreach — running in a loop while you focus on closing.">
-          Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura.
-        </p>
-        <a href="https://powerleads.poweragencyai.com/" target="_blank" rel="noopener" class="sw-link" style="color:#00d4ff"
-           data-it="Genera lead ora →" data-en="Generate leads now →">Genera lead ora →</a>
       </div>
+
     </div>
   </div>
 </section>
