@@ -86,6 +86,30 @@
           "@type": "Answer",
           "text": "Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Quanto costano i software?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ogni software ha un piano adatto a diverse esigenze. Contattaci per ricevere il listino aggiornato e scoprire quale soluzione è più adatta al tuo caso — la prima call è sempre gratuita."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quanto dura il percorso di formazione?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Il percorso e-commerce dura 8 settimane. Per prop firm hedging e AI la durata varia in base al tuo livello di partenza e agli obiettivi — la definiamo insieme durante la call conoscitiva gratuita."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Che risultati posso aspettarmi realisticamente?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dipende dal verticale e dal tuo impegno. I nostri clienti e-commerce lanciano il primo store in meno di una settimana. Chi usa POWERHEDGING risparmia ore di calcoli manuali fin dal primo giorno. Per l'AI, i team aziendali vedono risultati misurabili entro 30 giorni. Numeri reali, non promesse."
+        }
       }
     ]
   }
@@ -1430,7 +1454,7 @@
         <button class="lang-btn active" id="btn-it" onclick="setLang('it')">IT</button>
         <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
       </div>
-      <a href="#contact" class="nav-cta" data-it="Contattaci" data-en="Contact us">Contattaci</a>
+      <a href="#contact" class="nav-cta" data-it="Prenota una Call gratuita" data-en="Book a free Call">Prenota una Call gratuita</a>
     </div>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -1825,7 +1849,8 @@
            data-en="Finds the winning product via scraping, generates copy with AI and launches your Shopify store. Ready in 3 clicks.">
           Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
         </p>
-        <a href="[URL]" target="_blank" rel="noopener" class="sw-link" style="color:#10b981"
+        <!-- TODO: sostituire href="#contact" con URL reale POWERECOM quando disponibile -->
+        <a href="#contact" class="sw-link" style="color:#10b981"
            data-it="Lancia il tuo store →" data-en="Launch your store →">Lancia il tuo store →</a>
       </div>
       <div class="sw-card will-animate">
@@ -1840,7 +1865,8 @@
            data-en="Monitors all your MT5 accounts in real time, manages records, notifies anomalies and automatically generates lot size, TP and SL for each paired trade. You just place the order.">
           Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
         </p>
-        <a href="[URL]" target="_blank" rel="noopener" class="sw-link" style="color:#a855f7"
+        <!-- TODO: sostituire href="#contact" con URL reale POWERHEDGING quando disponibile -->
+        <a href="#contact" class="sw-link" style="color:#a855f7"
            data-it="Automatizza il trading →" data-en="Automate your trading →">Automatizza il trading →</a>
       </div>
       <div class="sw-card will-animate">
@@ -2244,6 +2270,31 @@
         <div class="faq-a"><p data-it="Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale."
              data-en="Yes, all our platforms are accessible via browser on desktop and mobile. No local installation required.">Sì, tutte le nostre piattaforme sono accessibili via browser da desktop e mobile. Non è richiesta nessuna installazione locale.</p></div>
       </div>
+      <!-- TODO: sostituire i prezzi placeholder con quelli reali quando disponibili -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="Quanto costano i software?" data-en="How much do the software tools cost?">Quanto costano i software?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p data-it="Ogni software ha un piano adatto a diverse esigenze. Contattaci per ricevere il listino aggiornato e scoprire quale soluzione è più adatta al tuo caso — la prima call è sempre gratuita."
+             data-en="Each software has a plan to fit different needs. Contact us to get the updated pricing and find out which solution fits your case best — the first call is always free.">Ogni software ha un piano adatto a diverse esigenze. Contattaci per ricevere il listino aggiornato e scoprire quale soluzione è più adatta al tuo caso — la prima call è sempre gratuita.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="Quanto dura il percorso di formazione?" data-en="How long is the training program?">Quanto dura il percorso di formazione?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p data-it="Il percorso e-commerce dura 8 settimane. Per prop firm hedging e AI la durata varia in base al tuo livello di partenza e agli obiettivi — la definiamo insieme durante la call conoscitiva gratuita."
+             data-en="The e-commerce program lasts 8 weeks. For prop firm hedging and AI, the duration depends on your starting level and goals — we define it together during the free discovery call.">Il percorso e-commerce dura 8 settimane. Per prop firm hedging e AI la durata varia in base al tuo livello di partenza e agli obiettivi — la definiamo insieme durante la call conoscitiva gratuita.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span data-it="Che risultati posso aspettarmi realisticamente?" data-en="What results can I realistically expect?">Che risultati posso aspettarmi realisticamente?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><p data-it="Dipende dal verticale e dal tuo impegno. I nostri clienti e-commerce lanciano il primo store in meno di una settimana. Chi usa POWERHEDGING risparmia ore di calcoli manuali fin dal primo giorno. Per l'AI, i team aziendali vedono risultati misurabili entro 30 giorni. Numeri reali, non promesse."
+             data-en="It depends on the vertical and your commitment. Our e-commerce clients launch their first store in less than a week. POWERHEDGING users save hours of manual calculations from day one. For AI, business teams see measurable results within 30 days. Real numbers, not promises.">Dipende dal verticale e dal tuo impegno. I nostri clienti e-commerce lanciano il primo store in meno di una settimana. Chi usa POWERHEDGING risparmia ore di calcoli manuali fin dal primo giorno. Per l'AI, i team aziendali vedono risultati misurabili entro 30 giorni. Numeri reali, non promesse.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -2358,7 +2409,7 @@
 
       <div class="footer-col">
         <div class="footer-col-title" data-it="Contatti" data-en="Contact">Contatti</div>
-        <a href="#contact" data-it="Prenota una Call" data-en="Book a Call">Prenota una Call</a>
+        <a href="#contact" data-it="Prenota una Call gratuita" data-en="Book a free Call">Prenota una Call gratuita</a>
         <a href="https://wa.me/[NUMERO]" target="_blank" rel="noopener">WhatsApp</a>
         <a href="mailto:info@poweragency.it" data-it="Scrivici" data-en="Email us">Scrivici</a>
       </div>
