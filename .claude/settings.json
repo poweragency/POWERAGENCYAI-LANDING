@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -L \"https://aidia.it/\" -o /tmp/aidia.html)",
+      "Read(//tmp/**)"
+    ]
+  }
+}
