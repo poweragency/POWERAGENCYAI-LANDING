@@ -407,9 +407,9 @@
   /* ---- DIVIDER ---- */
   .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); }
 
-  /* ---- AI POWERED BANNER ---- */
-  #ai-banner {
-    padding: 80px 0;
+  /* ---- TECH LOGO CAROUSEL ---- */
+  #tech-carousel {
+    padding: 48px 0;
     border-top: 1px solid rgba(255,255,255,0.06);
     border-bottom: 1px solid rgba(255,255,255,0.06);
     overflow: hidden;
@@ -419,27 +419,56 @@
     position: relative;
     z-index: 2;
   }
-  .marquee-track {
-    display: flex;
-    gap: 0;
-    width: max-content;
-    animation: marquee 25s linear infinite;
+  .tech-label {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
   }
-  @keyframes marquee {
+  .tech-track-wrap {
+    position: relative;
+    width: 100%;
+  }
+  .tech-track-wrap::before,
+  .tech-track-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .tech-track-wrap::before { left: 0; background: linear-gradient(to right, rgba(10,10,10,1), transparent); }
+  .tech-track-wrap::after  { right: 0; background: linear-gradient(to left, rgba(10,10,10,1), transparent); }
+  .tech-track {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    width: max-content;
+    animation: techScroll 30s linear infinite;
+  }
+  @keyframes techScroll {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
-  .marquee-item {
-    display: flex; align-items: center; gap: 16px;
-    padding: 0 48px;
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     white-space: nowrap;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    color: rgba(255,255,255,0.08);
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    transition: color 0.3s;
+    flex-shrink: 0;
   }
-  .marquee-item .highlight { color: var(--orange); }
-  .marquee-separator { color: rgba(255,255,255,0.15); }
+  .tech-item:hover { color: rgba(255,255,255,0.7); }
+  .tech-item svg { width: 24px; height: 24px; opacity: 0.5; }
+  .tech-item img { height: 22px; width: auto; opacity: 0.4; filter: grayscale(1) brightness(2); transition: opacity 0.3s; }
+  .tech-item:hover img { opacity: 0.8; }
 
   /* ---- ABOUT ---- */
   #about { padding: 120px 0; }
@@ -522,6 +551,25 @@
     margin-bottom: 6px;
   }
   .metric-label { font-size: 11px; color: var(--gray-400); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+  .tech-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .tech-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-300);
+  }
 
   /* ---- BUSINESS ---- */
   #business { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
@@ -610,6 +658,58 @@
   }
   .btn-angle:hover { opacity: 0.8; }
 
+  /* ---- PROCESS ---- */
+  #process { padding: 100px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .process-header { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+  .process-header h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .process-header p { color: var(--gray-300); font-size: 15px; line-height: 1.7; }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .process-step {
+    background: #000;
+    padding: 36px 28px;
+    text-align: center;
+    position: relative;
+  }
+  .step-num {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--orange);
+    opacity: 0.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.04em;
+  }
+  .step-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(200,90,20,0.08);
+    border: 1px solid rgba(200,90,20,0.15);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .step-icon svg { width: 20px; height: 20px; color: var(--orange); }
+  .process-step h4 { font-size: 15px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .process-step p { font-size: 13px; color: var(--gray-400); line-height: 1.6; }
+  @media (max-width: 768px) {
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .process-steps { grid-template-columns: 1fr; }
+  }
+
   /* ---- SOFTWARE ---- */
   #software { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
   .software-header { max-width: 640px; margin: 0 auto 64px; text-align: center; }
@@ -683,55 +783,6 @@
     font-weight: 500;
     letter-spacing: 0.03em;
   }
-
-  /* ---- SOCIAL ---- */
-  #social { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); }
-  .social-inner { text-align: center; }
-  .social-inner h2 {
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-    margin-bottom: 16px;
-  }
-  .social-inner > p {
-    color: var(--gray-300);
-    font-size: 15px;
-    line-height: 1.7;
-    max-width: 480px;
-    margin: 0 auto 16px;
-  }
-  .ai-line {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 13px; color: var(--cyan); font-weight: 600;
-    margin-bottom: 56px;
-  }
-  .social-grid {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .social-card {
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    padding: 24px 32px;
-    text-decoration: none;
-    color: var(--white);
-    display: flex; align-items: center; gap: 14px;
-    min-width: 180px;
-    transition: border-color 0.25s, background 0.25s, transform 0.25s;
-    background: rgba(255,255,255,0.01);
-  }
-  .social-card:hover {
-    border-color: rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.04);
-    transform: translateY(-2px);
-  }
-  .social-card-icon { font-size: 24px; }
-  .social-card-name { font-size: 14px; font-weight: 700; }
-  .social-card-handle { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
 
   /* ---- PROOF ---- */
   #proof { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
@@ -977,6 +1028,27 @@
   .form-group textarea:focus { border-color: rgba(255,255,255,0.25); }
   .form-group textarea { resize: none; height: 100px; }
   .form-group select option { background: #111; }
+  .pill-selector { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill-option {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.03);
+    color: var(--gray-300);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pill-option:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+  .pill-option.selected {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #fff;
+  }
+  .pill-option input { display: none; }
   .form-submit {
     width: 100%;
     background: var(--orange);
@@ -1100,8 +1172,6 @@
     .form-wrapper { padding: 32px 20px; }
     .container { padding: 0 20px; }
     .angle-tab { font-size: 10px; padding: 12px 10px; }
-    .social-grid { gap: 10px; }
-    .social-card { min-width: 140px; padding: 18px 20px; }
   }
 
   /* ---- COOKIE BANNER ---- */
@@ -1166,7 +1236,7 @@
   ============================================================ */
 
   /* Minimal dark veil — text readable, stars fully visible */
-  #about, #business, #software, #social, #social-proof, #faq, #contact {
+  #about, #business, #software, #social-proof, #faq, #contact, #process {
     background: rgba(0, 2, 10, 0.08);
   }
   #hero {
@@ -1180,7 +1250,6 @@
   .founder-card,
   .testimonial-card,
   .faq-item,
-  .social-card,
   .business-card,
   .vertical-header,
   .vertical-body {
@@ -1277,7 +1346,6 @@
       <li><a href="#about" data-it="Chi Siamo" data-en="About">Chi Siamo</a></li>
       <li><a href="#business" data-it="Business" data-en="Business">Business</a></li>
       <li><a href="#software" data-it="Software" data-en="Software">Software</a></li>
-      <li><a href="#social" data-it="Social" data-en="Social">Social</a></li>
       <li><a href="#contact" data-it="Contatti" data-en="Contact">Contatti</a></li>
     </ul>
     <div class="nav-right">
@@ -1298,7 +1366,6 @@
   <a href="#about" onclick="toggleMenu()" data-it="Chi Siamo" data-en="About">Chi Siamo</a>
   <a href="#business" onclick="toggleMenu()" data-it="Business" data-en="Business">Business</a>
   <a href="#software" onclick="toggleMenu()" data-it="Software" data-en="Software">Software</a>
-  <a href="#social" onclick="toggleMenu()" data-it="Social" data-en="Social">Social</a>
   <a href="#contact" onclick="toggleMenu()" data-it="Contatti" data-en="Contact">Contatti</a>
   <div style="display:flex;gap:12px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06)">
     <button id="mobile-btn-it" onclick="setLang('it');toggleMenu()" style="background:none;border:none;color:#fff;font-family:Inter,sans-serif;font-weight:700;font-size:14px;cursor:pointer">IT</button>
@@ -1344,17 +1411,37 @@
   </div>
 </section>
 
-<!-- AI POWERED MARQUEE -->
-<div id="ai-banner">
-  <div class="marquee-track" id="marquee">
-    <span class="marquee-item">ENTIRELY <span class="highlight">AI-POWERED</span> <span class="marquee-separator">—</span></span>
-    <span class="marquee-item">E-COMMERCE <span class="marquee-separator">·</span></span>
-    <span class="marquee-item">PROP FIRM HEDGING <span class="marquee-separator">·</span></span>
-    <span class="marquee-item">ARTIFICIAL INTELLIGENCE <span class="marquee-separator">—</span></span>
-    <span class="marquee-item">ENTIRELY <span class="highlight">AI-POWERED</span> <span class="marquee-separator">—</span></span>
-    <span class="marquee-item">E-COMMERCE <span class="marquee-separator">·</span></span>
-    <span class="marquee-item">PROP FIRM HEDGING <span class="marquee-separator">·</span></span>
-    <span class="marquee-item">ARTIFICIAL INTELLIGENCE <span class="marquee-separator">—</span></span>
+<!-- TECH CAROUSEL -->
+<div id="tech-carousel">
+  <div class="tech-label" data-it="Le tecnologie che utilizziamo" data-en="Technologies we use">Le tecnologie che utilizziamo</div>
+  <div class="tech-track-wrap">
+    <div class="tech-track">
+      <span class="tech-item">Shopify</span>
+      <span class="tech-item">MetaTrader 5</span>
+      <span class="tech-item">OpenAI</span>
+      <span class="tech-item">Claude AI</span>
+      <span class="tech-item">Make</span>
+      <span class="tech-item">Zapier</span>
+      <span class="tech-item">Python</span>
+      <span class="tech-item">Node.js</span>
+      <span class="tech-item">React</span>
+      <span class="tech-item">Stripe</span>
+      <span class="tech-item">Vercel</span>
+      <span class="tech-item">Supabase</span>
+      <!-- Duplicati per loop continuo -->
+      <span class="tech-item">Shopify</span>
+      <span class="tech-item">MetaTrader 5</span>
+      <span class="tech-item">OpenAI</span>
+      <span class="tech-item">Claude AI</span>
+      <span class="tech-item">Make</span>
+      <span class="tech-item">Zapier</span>
+      <span class="tech-item">Python</span>
+      <span class="tech-item">Node.js</span>
+      <span class="tech-item">React</span>
+      <span class="tech-item">Stripe</span>
+      <span class="tech-item">Vercel</span>
+      <span class="tech-item">Supabase</span>
+    </div>
   </div>
 </div>
 
@@ -1396,6 +1483,16 @@
             <div class="metric-number counter" data-target="50">0</div>
             <div class="metric-label" data-it="Clienti" data-en="Clients">Clienti</div>
           </div>
+        </div>
+        <div class="tech-badges">
+          <span class="tech-badge">Shopify</span>
+          <span class="tech-badge">MetaTrader 5</span>
+          <span class="tech-badge">OpenAI</span>
+          <span class="tech-badge">Claude AI</span>
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">Make</span>
+          <span class="tech-badge">React</span>
+          <span class="tech-badge">Stripe</span>
         </div>
       </div>
       <div class="will-animate">
@@ -1467,7 +1564,7 @@
               POWERECOM trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
             </p>
             <a href="#software" class="btn-angle" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)"
-               data-it="Scopri il Software →" data-en="Explore the Software →">Scopri il Software →</a>
+               data-it="Lancia il tuo store →" data-en="Launch your store →">Lancia il tuo store →</a>
           </div>
           <div class="angle-panel" id="ecom-consulting">
             <p data-it="Il nostro percorso 1:1 ti guida dalla scelta del prodotto alla prima vendita, fino allo scaling. 8 settimane fianco a fianco con chi gestisce store da 6 cifre al mese."
@@ -1475,7 +1572,7 @@
               Il nostro percorso 1:1 ti guida dalla scelta del prodotto alla prima vendita, fino allo scaling. 8 settimane fianco a fianco con chi gestisce store da 6 cifre al mese.
             </p>
             <a href="#contact" class="btn-angle" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)"
-               data-it="Prenota una Call →" data-en="Book a Call →">Prenota una Call →</a>
+               data-it="Inizia il percorso →" data-en="Start your path →">Inizia il percorso →</a>
           </div>
           <div class="angle-panel" id="ecom-collab">
             <p data-it="Entra nel nostro team come partner operativo. Gestiamo insieme store in dropshipping e wholesale, dividendo effort e ricavi. Cerchiamo persone motivate, con o senza esperienza."
@@ -1483,7 +1580,7 @@
               Entra nel nostro team come partner operativo. Gestiamo insieme store in dropshipping e wholesale, dividendo effort e ricavi. Cerchiamo persone motivate, con o senza esperienza.
             </p>
             <a href="#contact" class="btn-angle" style="background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)"
-               data-it="Parliamone →" data-en="Let's talk →">Parliamone →</a>
+               data-it="Entra nel team →" data-en="Join the team →">Entra nel team →</a>
           </div>
         </div>
       </div>
@@ -1513,7 +1610,7 @@
               POWERHEDGING monitora in tempo reale tutti i tuoi account MT5 — balance, trade aperti, anomalie — registra il bilancio e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
             </p>
             <a href="#software" class="btn-angle" style="background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2)"
-               data-it="Scopri il Software →" data-en="Explore the Software →">Scopri il Software →</a>
+               data-it="Automatizza il tuo hedging →" data-en="Automate your hedging →">Automatizza il tuo hedging →</a>
           </div>
           <div class="angle-panel" id="prop-consulting">
             <p data-it="Un percorso completo per imparare a fare hedging su prop firm: dalla teoria matematica alla pratica operativa. Accedi alle stesse strategie che usiamo sui nostri account reali."
@@ -1521,7 +1618,7 @@
               Un percorso completo per imparare a fare hedging su prop firm: dalla teoria matematica alla pratica operativa. Accedi alle stesse strategie che usiamo sui nostri account reali.
             </p>
             <a href="#contact" class="btn-angle" style="background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2)"
-               data-it="Prenota una Call →" data-en="Book a Call →">Prenota una Call →</a>
+               data-it="Impara le strategie →" data-en="Learn the strategies →">Impara le strategie →</a>
           </div>
           <div class="angle-panel" id="prop-collab">
             <p data-it="Due modelli di collaborazione. Hai capitale? Noi gestiamo la strategia con POWERHEDGING, tu fornisci i fondi e dividiamo i profitti. Non hai capitale? Forniamo noi i fondi e sei tu a operare con il nostro software — revenue share in entrambi i casi."
@@ -1529,7 +1626,7 @@
               Due modelli di collaborazione. Hai capitale? Noi gestiamo la strategia con POWERHEDGING, tu fornisci i fondi e dividiamo i profitti. Non hai capitale? Forniamo noi i fondi e sei tu a operare con il nostro software — revenue share in entrambi i casi.
             </p>
             <a href="#contact" class="btn-angle" style="background:rgba(168,85,247,0.1);color:#a855f7;border:1px solid rgba(168,85,247,0.2)"
-               data-it="Parliamone →" data-en="Let's talk →">Parliamone →</a>
+               data-it="Dividiamo i profitti →" data-en="Let's split profits →">Dividiamo i profitti →</a>
           </div>
         </div>
       </div>
@@ -1559,7 +1656,7 @@
               POWERLEADS è il nostro sistema di lead generation AI: scraper, qualificatore e outreach automatico su più canali. Genera prospect qualificati 24/7 senza intervento umano.
             </p>
             <a href="#software" class="btn-angle" style="background:rgba(0,212,255,0.08);color:#00d4ff;border:1px solid rgba(0,212,255,0.2)"
-               data-it="Scopri il Software →" data-en="Explore the Software →">Scopri il Software →</a>
+               data-it="Genera lead automaticamente →" data-en="Generate leads automatically →">Genera lead automaticamente →</a>
           </div>
           <div class="angle-panel" id="ai-consulting">
             <p data-it="Insegniamo ai team aziendali a integrare l'AI nei loro workflow. Dal prompt engineering all'automazione con agenti custom. Risultati misurabili nel tuo processo entro 30 giorni."
@@ -1567,7 +1664,7 @@
               Insegniamo ai team aziendali a integrare l'AI nei loro workflow. Dal prompt engineering all'automazione con agenti custom. Risultati misurabili nel tuo processo entro 30 giorni.
             </p>
             <a href="#contact" class="btn-angle" style="background:rgba(0,212,255,0.08);color:#00d4ff;border:1px solid rgba(0,212,255,0.2)"
-               data-it="Prenota una Call →" data-en="Book a Call →">Prenota una Call →</a>
+               data-it="Integra l'AI nel tuo team →" data-en="Integrate AI in your team →">Integra l'AI nel tuo team →</a>
           </div>
           <div class="angle-panel" id="ai-collab">
             <p data-it="Vuoi lavorare con noi? Ti affidiamo progetti reali da gestire in autonomia, anche se parti da zero. Ti formiamo, ti supportiamo e ti diamo gli strumenti. Tu esegui, noi dividiamo i risultati."
@@ -1575,12 +1672,64 @@
               Vuoi lavorare con noi? Ti affidiamo progetti reali da gestire in autonomia, anche se parti da zero. Ti formiamo, ti supportiamo e ti diamo gli strumenti. Tu esegui, noi dividiamo i risultati.
             </p>
             <a href="#contact" class="btn-angle" style="background:rgba(0,212,255,0.08);color:#00d4ff;border:1px solid rgba(0,212,255,0.2)"
-               data-it="Parliamone →" data-en="Let's talk →">Parliamone →</a>
+               data-it="Lavora con noi →" data-en="Work with us →">Lavora con noi →</a>
           </div>
         </div>
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- COME LAVORIAMO -->
+<section id="process">
+  <div class="container">
+    <div class="process-header will-animate">
+      <div class="section-label" data-it="Il Processo" data-en="Our Process">Il Processo</div>
+      <h2 data-it="Come lavoriamo." data-en="How we work.">Come lavoriamo.</h2>
+      <p data-it="Dal primo contatto ai risultati concreti. Un percorso chiaro, senza sorprese."
+         data-en="From first contact to real results. A clear path, no surprises.">
+        Dal primo contatto ai risultati concreti. Un percorso chiaro, senza sorprese.
+      </p>
+    </div>
+    <div class="process-steps will-animate">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <h4 data-it="Call Conoscitiva" data-en="Discovery Call">Call Conoscitiva</h4>
+        <p data-it="Capiamo i tuoi obiettivi e il verticale giusto per te."
+           data-en="We understand your goals and the right vertical for you.">Capiamo i tuoi obiettivi e il verticale giusto per te.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+        <h4 data-it="Analisi & Strategia" data-en="Analysis & Strategy">Analisi & Strategia</h4>
+        <p data-it="Definiamo il piano d'azione e gli strumenti necessari."
+           data-en="We define the action plan and the tools needed.">Definiamo il piano d'azione e gli strumenti necessari.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+        </div>
+        <h4 data-it="Implementazione" data-en="Implementation">Implementazione</h4>
+        <p data-it="Mettiamo in pratica con i nostri software e il nostro supporto."
+           data-en="We put it into practice with our software and support.">Mettiamo in pratica con i nostri software e il nostro supporto.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h4 data-it="Risultati & Scaling" data-en="Results & Scaling">Risultati & Scaling</h4>
+        <p data-it="Monitoriamo, ottimizziamo e scaliamo insieme."
+           data-en="We monitor, optimize and scale together.">Monitoriamo, ottimizziamo e scaliamo insieme.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1611,7 +1760,7 @@
           Trova il prodotto vincente tramite scraping, genera il copy con l'AI e lancia il tuo store su Shopify. Pronto in 3 click.
         </p>
         <a href="[URL]" target="_blank" rel="noopener" class="sw-link" style="color:#10b981"
-           data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
+           data-it="Lancia il tuo store →" data-en="Launch your store →">Lancia il tuo store →</a>
       </div>
       <div class="sw-card will-animate">
         <div class="sw-card-top">
@@ -1626,7 +1775,7 @@
           Monitora in tempo reale tutti i tuoi account MT5, gestisce l'anagrafica, notifica le anomalie e genera automaticamente lottaggio, TP e SL per ogni accoppiamento. Tu devi solo piazzare l'ordine.
         </p>
         <a href="[URL]" target="_blank" rel="noopener" class="sw-link" style="color:#a855f7"
-           data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
+           data-it="Automatizza il trading →" data-en="Automate your trading →">Automatizza il trading →</a>
       </div>
       <div class="sw-card will-animate">
         <div class="sw-card-top">
@@ -1641,39 +1790,7 @@
           Trova, qualifica e contatta lead su misura per il tuo business. Tre moduli AI integrati — scraping, scoring e outreach — che lavorano in loop mentre tu ti concentri sulla chiusura.
         </p>
         <a href="https://powerleads.poweragencyai.com/" target="_blank" rel="noopener" class="sw-link" style="color:#00d4ff"
-           data-it="Scopri di più →" data-en="Learn more →">Scopri di più →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SOCIAL -->
-<section id="social">
-  <div class="container">
-    <div class="social-inner">
-      <div class="section-label" data-it="Seguici" data-en="Follow Us">Seguici</div>
-      <h2 class="will-animate"
-          data-it="Siamo su tutti i canali."
-          data-en="We're on every channel.">
-        Siamo su tutti i canali.
-      </h2>
-      <p class="will-animate"
-         data-it="Contenuti quotidiani su e-commerce, prop firm e AI. Ogni giorno condividiamo insight, strategie e aggiornamenti dai nostri business."
-         data-en="Daily content on e-commerce, prop firm, and AI. Every day we share insights, strategies, and updates from our businesses.">
-        Contenuti quotidiani su e-commerce, prop firm e AI. Ogni giorno condividiamo insight, strategie e aggiornamenti dai nostri business.
-      </p>
-      <div class="ai-line will-animate">
-        <span>⚡</span>
-        <span data-it="Ogni contenuto è creato e ottimizzato con l'AI" data-en="Every piece of content is created and optimized with AI">Ogni contenuto è creato e ottimizzato con l'AI</span>
-      </div>
-      <div class="social-grid will-animate">
-        <a href="https://www.instagram.com/poweragencyai/" target="_blank" rel="noopener" class="social-card">
-          <span class="social-card-icon" aria-hidden="true">📸</span>
-          <div>
-            <div class="social-card-name">Instagram</div>
-            <div class="social-card-handle">@poweragencyai</div>
-          </div>
-        </a>
+           data-it="Genera lead ora →" data-en="Generate leads now →">Genera lead ora →</a>
       </div>
     </div>
   </div>
@@ -2102,13 +2219,34 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="contact-vertical" data-it="Verticale di interesse" data-en="Vertical of interest">Verticale di interesse</label>
-          <select id="contact-vertical" name="vertical">
-            <option value="generale" data-it="Generale" data-en="General">Generale</option>
-            <option value="ecommerce" data-it="E-Commerce" data-en="E-Commerce">E-Commerce</option>
-            <option value="propfirm" data-it="Prop Firm" data-en="Prop Firm">Prop Firm</option>
-            <option value="ai" data-it="AI" data-en="AI">AI</option>
-          </select>
+          <label data-it="Tipo di progetto" data-en="Project type">Tipo di progetto</label>
+          <input type="hidden" id="contact-project-type" name="project_type" value="" />
+          <div class="pill-selector" id="project-pills">
+            <label class="pill-option" onclick="selectPill(this, 'Software')">
+              <span data-it="Software" data-en="Software">Software</span>
+            </label>
+            <label class="pill-option" onclick="selectPill(this, 'Consulenza')">
+              <span data-it="Consulenza" data-en="Consulting">Consulenza</span>
+            </label>
+            <label class="pill-option" onclick="selectPill(this, 'Collaborazione')">
+              <span data-it="Collaborazione" data-en="Collaboration">Collaborazione</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-it="Verticale di interesse" data-en="Vertical of interest">Verticale di interesse</label>
+          <input type="hidden" id="contact-vertical" name="vertical" value="" />
+          <div class="pill-selector" id="vertical-pills">
+            <label class="pill-option" onclick="selectPill(this, 'E-Commerce')">
+              <span>E-Commerce</span>
+            </label>
+            <label class="pill-option" onclick="selectPill(this, 'Prop Firm')">
+              <span>Prop Firm</span>
+            </label>
+            <label class="pill-option" onclick="selectPill(this, 'AI')">
+              <span>AI</span>
+            </label>
+          </div>
         </div>
         <div class="form-group">
           <label for="contact-message" data-it="Messaggio" data-en="Message">Messaggio</label>
@@ -3034,6 +3172,15 @@ function toggleFaq(btn) {
     item.classList.add('open');
     item.querySelector('.faq-icon').textContent = '×';
   }
+}
+
+// ===================== PILL SELECTOR =====================
+function selectPill(el, value) {
+  const group = el.closest('.pill-selector');
+  group.querySelectorAll('.pill-option').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  const hidden = group.previousElementSibling;
+  if (hidden && hidden.type === 'hidden') hidden.value = value;
 }
 
 // ===================== GSAP ANIMATIONS =====================
