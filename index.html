@@ -2404,7 +2404,7 @@
           Compila il form e ti ricontatteremo entro 24 ore.
         </p>
       </div>
-      <form id="contact-form" action="https://formspree.io/f/xpwdqkba" method="POST">
+      <form id="contact-form">
         <div class="form-row">
           <div class="form-group">
             <label for="contact-name" data-it="Nome" data-en="Name">Nome</label>
@@ -3490,7 +3490,14 @@ function acceptCookies() {
 
 <script>
 // ===================== CRM LEAD INGESTION =====================
-document.getElementById('contact-form').addEventListener('submit', function() {
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var form = this;
+  var btn = form.querySelector('.form-submit');
+  var originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '...';
+
   var name = document.getElementById('contact-name').value.trim();
   var email = document.getElementById('contact-email').value.trim();
   var projectType = document.getElementById('contact-project-type').value;
@@ -3515,7 +3522,19 @@ document.getElementById('contact-form').addEventListener('submit', function() {
       notes: message,
       gdpr_consent: true
     })
-  }).catch(function() {});
+  }).then(function(res) {
+    if (res.ok) {
+      form.innerHTML = '<div style="text-align:center;padding:2rem 0"><h3 style="color:#F97316;margin-bottom:0.5rem">Messaggio inviato!</h3><p style="opacity:0.7">Ti ricontatteremo entro 24 ore.</p></div>';
+    } else {
+      btn.disabled = false;
+      btn.textContent = originalText;
+      alert('Si è verificato un errore. Riprova.');
+    }
+  }).catch(function() {
+    btn.disabled = false;
+    btn.textContent = originalText;
+    alert('Errore di connessione. Riprova.');
+  });
 });
 </script>
 </body>
