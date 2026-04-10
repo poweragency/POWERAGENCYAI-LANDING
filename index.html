@@ -3488,5 +3488,35 @@ function acceptCookies() {
   <button class="cookie-accept" onclick="acceptCookies()" data-it="Accetta" data-en="Accept">Accetta</button>
 </div>
 
+<script>
+// ===================== CRM LEAD INGESTION =====================
+document.getElementById('contact-form').addEventListener('submit', function() {
+  var name = document.getElementById('contact-name').value.trim();
+  var email = document.getElementById('contact-email').value.trim();
+  var projectType = document.getElementById('contact-project-type').value;
+  var vertical = document.getElementById('contact-vertical').value;
+  var message = document.getElementById('contact-message').value.trim();
+
+  var nameParts = name.split(' ');
+  var firstName = nameParts[0] || name;
+  var lastName = nameParts.slice(1).join(' ') || '';
+
+  var sourceDetail = [projectType, vertical].filter(Boolean).join(' - ') || 'Landing Power Agency';
+
+  fetch('https://crm.poweragencyai.com/api/ingest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      source: 'landing',
+      source_detail: sourceDetail,
+      notes: message,
+      gdpr_consent: true
+    })
+  }).catch(function() {});
+});
+</script>
 </body>
 </html>
